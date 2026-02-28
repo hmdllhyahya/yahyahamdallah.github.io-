@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Yahya H. - Portofolio</title>
+  <title>Yahya Hamdallah — Portfolio</title>
   <meta name="description" content="Yahya Hamdallah — Student, Freelancer & Creative Builder." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -36,10 +36,23 @@
     }
 
     /* ── Cursor ── */
-    #cur { position:fixed;width:8px;height:8px;background:var(--text);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);mix-blend-mode:difference;transition:width .2s,height .2s; }
-    #cur-ring { position:fixed;width:38px;height:38px;border:1.5px solid rgba(0,0,0,0.5);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);mix-blend-mode:difference; }
-    body.ch #cur{width:18px;height:18px;}
-    body.ch #cur-ring{width:56px;height:56px;}
+    #cur {
+      position:fixed;width:10px;height:10px;
+      background:var(--accent);
+      border-radius:50%;pointer-events:none;z-index:9999;
+      transform:translate(-50%,-50%);
+      transition:width .22s cubic-bezier(.34,1.56,.64,1),height .22s cubic-bezier(.34,1.56,.64,1),background .2s;
+      box-shadow:0 0 0 2px rgba(10,132,255,.2);
+    }
+    #cur-ring {
+      position:fixed;width:36px;height:36px;
+      border:1.5px solid rgba(10,132,255,.4);
+      border-radius:50%;pointer-events:none;z-index:9998;
+      transform:translate(-50%,-50%);
+      transition:width .3s,height .3s,border-color .2s;
+    }
+    body.ch #cur{width:22px;height:22px;background:var(--text);box-shadow:none;}
+    body.ch #cur-ring{width:54px;height:54px;border-color:rgba(0,0,0,.18);}
 
     /* ── Nav: Liquid Glass ── */
     nav {
@@ -311,14 +324,19 @@
     .about-grid{display:grid;grid-template-columns:1fr 1fr;gap:88px;align-items:center;margin-top:76px;}
     .about-visual{position:relative;}
     .about-card {
-      background:linear-gradient(145deg,#1a1a1a,#2c2c2e);
       border-radius:28px;aspect-ratio:4/5;
-      display:flex;flex-direction:column;align-items:center;justify-content:center;
-      gap:12px;overflow:hidden;position:relative;
+      overflow:hidden;position:relative;
     }
-    .about-card-initials{font-family:'Playfair Display',serif;font-size:88px;color:rgba(255,255,255,.08);letter-spacing:-.04em;user-select:none;}
-    .about-card-name{font-family:'Playfair Display',serif;font-size:22px;color:rgba(255,255,255,.85);letter-spacing:-.02em;}
-    .about-card-title{font-size:13px;font-weight:400;color:rgba(255,255,255,.38);letter-spacing:.06em;}
+    .about-card img {
+      width:100%;height:100%;object-fit:cover;display:block;
+      transition:transform .5s cubic-bezier(.4,0,.2,1);
+    }
+    .about-card:hover img { transform:scale(1.04); }
+    .about-card-overlay {
+      position:absolute;inset:0;
+      background:linear-gradient(to top, rgba(0,0,0,0.6) 0%, transparent 50%);
+      pointer-events:none;
+    }
     .about-card-glow{position:absolute;bottom:-40px;left:50%;transform:translateX(-50%);width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(200,146,42,.25),transparent 70%);pointer-events:none;}
     .about-badge {
       position:absolute;bottom:28px;right:-20px;
@@ -348,7 +366,10 @@
       transition:transform .35s cubic-bezier(.34,1.56,.64,1),box-shadow .35s;
     }
     .pcard:hover{transform:translateY(-10px) scale(1.01);box-shadow:0 28px 72px rgba(0,0,0,.1);}
-    .pthumb{width:100%;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center;font-size:52px;}
+    .pthumb{width:100%;aspect-ratio:16/9;overflow:hidden;position:relative;}
+    .pthumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .4s cubic-bezier(.4,0,.2,1);}
+    .pcard:hover .pthumb img{transform:scale(1.06);}
+    .pthumb-label{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.45);backdrop-filter:blur(8px);color:white;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:100px;}
     .pinfo{padding:22px 24px;}
     .ptag{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:7px;}
     .ptitle{font-family:'Playfair Display',serif;font-size:21px;letter-spacing:-.02em;color:var(--text);margin-bottom:7px;}
@@ -507,7 +528,7 @@
           <div class="dd-icon">💼</div>
           <div class="dd-label">LinkedIn<small>Connect with me</small></div>
         </a>
-        <a href="mailto:yahya@email.com">
+        <a href="/cdn-cgi/l/email-protection#fb829a93829abb9e969a9297d5989496">
           <div class="dd-icon">✉️</div>
           <div class="dd-label">Email<small>Direct message</small></div>
         </a>
@@ -563,9 +584,10 @@
       <div class="reveal rd2">
         <div class="about-visual">
           <div class="about-card">
-            <div class="about-card-initials">YH</div>
-            <div class="about-card-name">Yahya Hamdallah</div>
-            <div class="about-card-title">Student &amp; Freelancer</div>
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=750&fit=crop&crop=face" alt="Yahya Hamdallah" />
+            <div class="about-card-overlay"></div>
+            <div class="about-card-name" style="position:absolute;bottom:80px;left:24px;color:white;font-family:'Playfair Display',serif;font-size:22px;">Yahya Hamdallah</div>
+            <div class="about-card-title" style="position:absolute;bottom:58px;left:24px;color:rgba(255,255,255,.6);font-size:13px;letter-spacing:.06em;">Student &amp; Freelancer</div>
             <div class="about-card-glow"></div>
           </div>
           <div class="about-badge">
@@ -619,7 +641,10 @@
     <div class="projects-grid">
 
       <a href="https://github.com/yahyahamdallah" target="_blank" class="pcard reveal rd1">
-        <div class="pthumb" style="background:linear-gradient(135deg,#e0f2fe,#c7e5ff);">🌐</div>
+        <div class="pthumb">
+          <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&h=340&fit=crop" alt="Web App Project" />
+          <div class="pthumb-label">🌐 Web App</div>
+        </div>
         <div class="pinfo">
           <div class="ptag">Web App</div>
           <div class="ptitle">Project Name</div>
@@ -632,7 +657,10 @@
       </a>
 
       <a href="https://github.com/yahyahamdallah" target="_blank" class="pcard reveal rd2">
-        <div class="pthumb" style="background:linear-gradient(135deg,#fdf4ff,#f5d0fe);">🎨</div>
+        <div class="pthumb">
+          <img src="https://images.unsplash.com/photo-1561070791-2526d30994b5?w=600&h=340&fit=crop" alt="Design Project" />
+          <div class="pthumb-label">🎨 Design</div>
+        </div>
         <div class="pinfo">
           <div class="ptag">Design / UI</div>
           <div class="ptitle">Project Name</div>
@@ -645,7 +673,10 @@
       </a>
 
       <a href="https://github.com/yahyahamdallah" target="_blank" class="pcard reveal rd3">
-        <div class="pthumb" style="background:linear-gradient(135deg,#f0fdf4,#bbf7d0);">📱</div>
+        <div class="pthumb">
+          <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=600&h=340&fit=crop" alt="Client Project" />
+          <div class="pthumb-label">📱 Freelance</div>
+        </div>
         <div class="pinfo">
           <div class="ptag">Freelance</div>
           <div class="ptitle">Client Project</div>
@@ -658,7 +689,10 @@
       </a>
 
       <a href="https://github.com/yahyahamdallah" target="_blank" class="pcard reveal rd4">
-        <div class="pthumb" style="background:linear-gradient(135deg,#fff7ed,#fed7aa);">⚡</div>
+        <div class="pthumb">
+          <img src="https://images.unsplash.com/photo-1555099962-4199c345e5dd?w=600&h=340&fit=crop" alt="Personal Project" />
+          <div class="pthumb-label">⚡ Side Project</div>
+        </div>
         <div class="pinfo">
           <div class="ptag">Side Project</div>
           <div class="ptitle">Personal Build</div>
@@ -784,7 +818,7 @@
 </footer>
 
 <!-- ─── SCRIPT ────────────────────────────────────────────── -->
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   // Cursor
   const cur = document.getElementById('cur');
   const ring = document.getElementById('cur-ring');
@@ -860,7 +894,4 @@
   function send(e){
     e.preventDefault();
     const btn=document.getElementById('sb');
-    btn.textContent='Sending…';btn.style.opacity='.7';
-    setTimeout(()=>{
-      btn.textContent="✓ Sent! I'll reply soon.";
-      btn.style.backgrou
+    btn.
