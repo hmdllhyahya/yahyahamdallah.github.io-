@@ -457,8 +457,14 @@
     .f-back:hover{color:rgba(255,255,255,.7);}
 
     /* ── Reveal ── */
-    .reveal{opacity:0;transform:translateY(28px);transition:opacity .85s cubic-bezier(.22,1,.36,1),transform .85s cubic-bezier(.22,1,.36,1);}
-    .reveal.vis{opacity:1;transform:none;}
+    .reveal{
+      opacity:1;
+      transform:none;
+      transition:opacity .85s cubic-bezier(.22,1,.36,1),transform .85s cubic-bezier(.22,1,.36,1);
+    }
+    /* Only animate if JS has marked the page as ready */
+    body.js-ready .reveal{opacity:0;transform:translateY(28px);}
+    body.js-ready .reveal.vis{opacity:1;transform:none;}
     .rd1{transition-delay:.1s;}.rd2{transition-delay:.2s;}.rd3{transition-delay:.3s;}.rd4{transition-delay:.4s;}
 
     /* ── Keyframes ── */
@@ -819,6 +825,9 @@
 
 <!-- ─── SCRIPT ────────────────────────────────────────────── -->
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  // Mark JS as active — animations only run if this fires
+  document.body.classList.add('js-ready');
+
   // Cursor
   const cur = document.getElementById('cur');
   const ring = document.getElementById('cur-ring');
@@ -873,8 +882,16 @@
         });
       }
     });
-  },{threshold:.1});
+  },{threshold:0, rootMargin:'0px 0px -40px 0px'});
   document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+
+  // Nuclear fallback — if anything is still invisible after 1.5s, force it visible
+  setTimeout(()=>{
+    document.querySelectorAll('.reveal:not(.vis)').forEach(el=>{
+      el.classList.add('vis');
+      el.querySelectorAll('.sfill').forEach(b=>b.classList.add('on'));
+    });
+  }, 1500);
 
   // Skills tabs
   document.querySelectorAll('.scat').forEach(btn=>{
