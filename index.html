@@ -20,7 +20,7 @@
     body.ch #cur-ring{width:54px;height:54px;border-color:rgba(0,0,0,.18);}
 
     /* NAV */
-    nav{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:1000;display:flex;align-items:center;padding:0 6px;height:52px;border-radius:100px;background:rgba(255,255,255,0.6);backdrop-filter:saturate(200%) blur(28px) brightness(1.08);-webkit-backdrop-filter:saturate(200%) blur(28px) brightness(1.08);border:1px solid rgba(255,255,255,0.78);box-shadow:0 2px 12px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9);transition:box-shadow .3s;white-space:nowrap;}
+    nav{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:1000;display:flex;align-items:center;padding:0 6px;height:52px;border-radius:100px;background:rgba(255,255,255,0.6);backdrop-filter:saturate(200%) blur(28px) brightness(1.08);-webkit-backdrop-filter:saturate(200%) blur(28px) brightness(1.08);border:1px solid rgba(255,255,255,0.78);box-shadow:0 2px 12px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9);transition:box-shadow .3s,top .38s cubic-bezier(.22,1,.36,1),left .38s cubic-bezier(.22,1,.36,1),transform .38s cubic-bezier(.22,1,.36,1),padding .28s cubic-bezier(.22,1,.36,1);white-space:nowrap;}
     nav:hover{box-shadow:0 8px 32px rgba(0,0,0,0.12),inset 0 1px 0 rgba(255,255,255,0.95);}
     .nav-logo{font-family:"Playfair Display",serif;font-size:17px;color:var(--text);text-decoration:none;letter-spacing:-.02em;padding:0 18px 0 14px;height:100%;display:flex;align-items:center;border-right:1px solid rgba(0,0,0,0.07);flex-shrink:0;}
     .nav-logo span{color:var(--accent);}
@@ -45,7 +45,7 @@
     nav.slim .nav-items { display:none; }
     nav.slim .nav-cta { display:none; }
     nav.slim .nav-hamburger { display:flex; align-items:center; }
-    nav.slim { padding: 0 4px; }
+    nav.slim { padding: 0 4px; top: 12px; left: 14px; transform: none; }
 
     /* HERO */
     #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 100px;position:relative;overflow:hidden;background:#111;}
@@ -184,6 +184,7 @@
 
     @media(max-width:768px){
       nav{top:12px;padding:0 4px;max-width:calc(100vw - 24px);}
+      nav.slim{left:12px;top:10px;transform:none;}
       .nav-items,.nav-cta{display:none;}
       .nav-hamburger{display:flex;align-items:center;}
       .about-grid,.contact-layout,.exp-grid{grid-template-columns:1fr;gap:44px;}
@@ -194,35 +195,54 @@
       .about-badge{right:0;}
     }
 
-    /* ── Mobile Menu Panel ── */
+    /* ── Liquid Glass Drop Menu (mobile + slim desktop) ── */
     .mobile-menu {
       display: flex;
       flex-direction: column;
       gap: 8px;
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      top: 78px;
+      left: 50%;
+      width: min(560px, calc(100vw - 24px));
+      max-height: min(68vh, 560px);
       z-index: 999;
-      padding: 90px 24px 40px;
-      background: rgba(255,255,255,0.97);
-      backdrop-filter: saturate(180%) blur(30px);
-      -webkit-backdrop-filter: saturate(180%) blur(30px);
+      padding: 14px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.82);
+      background: linear-gradient(145deg, rgba(255,255,255,0.64), rgba(255,255,255,0.42));
+      backdrop-filter: saturate(220%) blur(34px) brightness(1.08);
+      -webkit-backdrop-filter: saturate(220%) blur(34px) brightness(1.08);
+      box-shadow: 0 22px 64px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.92);
       overflow-y: auto;
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
-      transform: translateY(-10px);
-      transition: opacity .28s cubic-bezier(.4,0,.2,1),
-                  transform .28s cubic-bezier(.4,0,.2,1),
-                  visibility 0s linear .28s;
+      transform: translateX(-50%) translateY(-10px) scale(.98);
+      transform-origin: top center;
+      transition: opacity .26s cubic-bezier(.4,0,.2,1),
+                  transform .34s cubic-bezier(.22,1,.36,1),
+                  visibility 0s linear .26s,
+                  left .34s cubic-bezier(.22,1,.36,1),
+                  top .34s cubic-bezier(.22,1,.36,1);
+    }
+    body.nav-shifted .mobile-menu {
+      left: 14px;
+      top: 72px;
+      transform-origin: top left;
     }
     .mobile-menu.open {
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
-      transform: none;
-      transition: opacity .28s cubic-bezier(.4,0,.2,1),
-                  transform .28s cubic-bezier(.4,0,.2,1),
-                  visibility 0s linear 0s;
+      transform: translateX(-50%) translateY(0) scale(1);
+      transition: opacity .26s cubic-bezier(.4,0,.2,1),
+                  transform .34s cubic-bezier(.22,1,.36,1),
+                  visibility 0s linear 0s,
+                  left .34s cubic-bezier(.22,1,.36,1),
+                  top .34s cubic-bezier(.22,1,.36,1);
+    }
+    body.nav-shifted .mobile-menu.open {
+      transform: translateX(0) translateY(0) scale(1);
     }
     .mob-section-label {
       font-size: 10px;
@@ -273,6 +293,16 @@
     .mob-cta:active { background: #b91c1c; }
     /* Hamburger open state */
     .nav-hamburger.is-open { color: #dc2626; }
+
+
+    @media(max-width:768px){
+      .mobile-menu{top:72px;left:12px;width:calc(100vw - 24px);max-height:min(72vh,540px);transform:translateY(-10px) scale(.98);} 
+      .mobile-menu.open{transform:translateY(0) scale(1);} 
+      body.nav-shifted .mobile-menu{left:10px;top:66px;} 
+      body.nav-shifted .mobile-menu.open{transform:translateY(0) scale(1);} 
+      .mob-link{padding:13px 14px;border-radius:14px;} 
+      .mob-link-icon{width:36px;height:36px;border-radius:10px;} 
+    }
 
   </style>
 </head>
@@ -714,8 +744,10 @@
     const y = window.scrollY;
     if (y > 80) {
       nav.classList.add('slim');
+      document.body.classList.add('nav-shifted');
     } else {
       nav.classList.remove('slim');
+      document.body.classList.remove('nav-shifted');
       // also close mobile menu if we scroll back to top
     }
     lastScroll = y;
