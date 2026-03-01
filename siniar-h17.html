@@ -479,6 +479,10 @@
     <div class="latest-wrap">
       <div class="latest-player reveal rd1">
         <iframe
+          id="latestEpisodeEmbed"
+          title="Latest Siniar H17 episode"
+          data-episode-url="https://open.spotify.com/episode/4M0Dw7v6pu9fM6Y4AvFlNt"
+          src="https://open.spotify.com/embed/episode/4M0Dw7v6pu9fM6Y4AvFlNt?utm_source=generator"
           title="Latest Siniar H17 episode on Spotify"
           src="https://open.spotify.com/episode/0HA1vgWo1HDBwDAsCKnnjS?si=s-ZtJcNmRLqgEgdCJwgsnQ"
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
@@ -791,6 +795,37 @@
       if (event.key === "Escape") closeTopbarMenu();
     });
   }
+
+  // Normalize direct Spotify links into embeddable URLs for latest episode
+  const latestEpisodeEmbed = document.getElementById("latestEpisodeEmbed");
+  const toSpotifyEmbedUrl = (url) => {
+    if (!url) return "";
+    const trimmed = String(url).trim();
+    const matchers = [
+      { pattern: /open\.spotify\.com\/(episode|show)\/([A-Za-z0-9]+)/i, kind: 1, id: 2 },
+      { pattern: /open\.spotify\.com\/embed\/(episode|show)\/([A-Za-z0-9]+)/i, kind: 1, id: 2 },
+      { pattern: /spotify:(episode|show):([A-Za-z0-9]+)/i, kind: 1, id: 2 },
+      { pattern: /podcasters\.spotify\.com\/pod\/show\/[^\s/]+\/episodes\/[^\s/]*-([A-Za-z0-9]+)/i, kind: "episode", id: 1 },
+      { pattern: /podcasters\.spotify\.com\/pod\/show\/([A-Za-z0-9]+)/i, kind: "show", id: 1 }
+    ];
+
+    for (const cfg of matchers) {
+      const found = trimmed.match(cfg.pattern);
+      if (!found) continue;
+      const kind = cfg.kind === 1 ? found[cfg.kind] : cfg.kind;
+      const id = found[cfg.id];
+      return `https://open.spotify.com/embed/${kind.toLowerCase()}/${id}?utm_source=generator`;
+    }
+
+    return trimmed.includes("open.spotify.com/embed/") ? trimmed : "";
+  };
+
+  if (latestEpisodeEmbed) {
+    const directUrl = latestEpisodeEmbed.dataset.episodeUrl || latestEpisodeEmbed.src;
+    const normalizedEmbed = toSpotifyEmbedUrl(directUrl);
+    if (normalizedEmbed) latestEpisodeEmbed.src = normalizedEmbed;
+  }
+
 
   // Reveal
   const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add("vis");});},{threshold:0,rootMargin:"0px 0px -30px 0px"});
