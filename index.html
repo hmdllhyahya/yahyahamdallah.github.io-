@@ -187,6 +187,79 @@
       #cur,#cur-ring{display:none;}body{cursor:auto;}
       .about-badge{right:0;}
     }
+
+    /* ── Mobile Menu Panel ── */
+    .mobile-menu {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 999;
+      padding: 90px 24px 40px;
+      flex-direction: column;
+      gap: 8px;
+      background: rgba(255,255,255,0.96);
+      backdrop-filter: saturate(180%) blur(30px);
+      -webkit-backdrop-filter: saturate(180%) blur(30px);
+      overflow-y: auto;
+      opacity: 0;
+      transform: translateY(-12px);
+      transition: opacity .3s, transform .3s;
+    }
+    .mobile-menu.open {
+      display: flex;
+      opacity: 1;
+      transform: none;
+    }
+    .mob-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #a1a1aa;
+      padding: 16px 4px 6px;
+      border-top: 1px solid rgba(0,0,0,0.07);
+      margin-top: 4px;
+    }
+    .mob-section-label:first-child { border-top: none; margin-top: 0; }
+    .mob-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: 16px;
+      text-decoration: none;
+      color: #18181b;
+      font-size: 16px;
+      font-weight: 400;
+      transition: background .15s;
+      border: 1px solid transparent;
+    }
+    .mob-link:hover, .mob-link:active { background: #f4f4f5; border-color: rgba(0,0,0,0.07); }
+    .mob-link-icon {
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      background: #f4f4f5;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+    }
+    .mob-link-text { display: flex; flex-direction: column; gap: 2px; }
+    .mob-link-text small { font-size: 12px; color: #71717a; font-weight: 400; }
+    .mob-cta {
+      margin-top: 16px;
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px;
+      border-radius: 16px;
+      background: #dc2626;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background .2s;
+    }
+    .mob-cta:active { background: #b91c1c; }
+    /* Hamburger open state */
+    .nav-hamburger.is-open { color: #dc2626; }
+
   </style>
 </head>
 <body>
@@ -211,7 +284,7 @@
         <a href="#contact"><div class="dd-icon">&#128172;</div><div class="dd-label">Get in Touch<small>Let's collaborate</small></div></a>
         <div class="dd-divider"></div>
         <a href="https://www.linkedin.com/in/yahyahmdllh/" target="_blank"><div class="dd-icon">&#128188;</div><div class="dd-label">LinkedIn<small>@yahyahmdllh</small></div></a>
-        <a href="mailto:yahyahmdllh@outlook.com"><div class="dd-icon">&#9993;&#65039;</div><div class="dd-label">Email<small>yahyahmdllh@outlook.com</small></div></a>
+        <a href="/cdn-cgi/l/email-protection#daa3bbb2a3bbb2b7beb6b6b29ab5afaeb6b5b5b1f4b9b5b7"><div class="dd-icon">&#9993;&#65039;</div><div class="dd-label">Email<small><span class="__cf_email__" data-cfemail="641d050c1d050c090008080c240b1110080b0b0f4a070b09">[email&#160;protected]</span></small></div></a>
         <a href="https://bit.ly/PortoYahya_2025" target="_blank"><div class="dd-icon">&#128196;</div><div class="dd-label">Full Portfolio<small>bit.ly/PortoYahya_2025</small></div></a>
       </div>
     </li>
@@ -289,7 +362,7 @@
         <div class="pfoot"><div class="chips"><span class="chip">Directing</span><span class="chip">Scriptwriting</span><span class="chip">Crew Mgmt</span></div><div class="parrow">&#8599;</div></div>
       </a>
 
-      <a href="#" class="pcard reveal rd2">
+      <a href="siniar-h17.html" class="pcard reveal rd2">
         <div class="pthumb">
           <img src="https://images.unsplash.com/photo-1478737270239-2f02b77fc618?w=600&h=340&fit=crop" alt="Siniar H17 Podcast" />
           <div class="pthumb-pill">&#127897; Podcast</div>
@@ -501,9 +574,9 @@
       <div class="reveal rd2">
         <p class="contact-desc">Whether it&apos;s a script, a creative collaboration, content writing, or a production role &mdash; I&apos;m open to projects that tell a story worth telling.</p>
         <div class="socials">
-          <a href="mailto:yahyahmdllh@outlook.com" class="slink">
+          <a href="/cdn-cgi/l/email-protection#b3cad2dbcad2dbded7dfdfdbf3dcc6c7dfdcdcd89dd0dcde" class="slink">
             <div class="sico">&#9993;&#65039;</div>
-            <div class="smeta"><span>Email</span><small>yahyahmdllh@outlook.com</small></div>
+            <div class="smeta"><span>Email</span><small><span class="__cf_email__" data-cfemail="dba2bab3a2bab3b6bfb7b7b39bb4aeafb7b4b4b0f5b8b4b6">[email&#160;protected]</span></small></div>
           </a>
           <a href="https://www.linkedin.com/in/yahyahmdllh/" target="_blank" class="slink">
             <div class="sico" style="background:rgba(10,102,194,.3);">
@@ -543,7 +616,7 @@
   <a href="#hero" class="f-back">&#8593; Back to top</a>
 </footer>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   document.body.classList.add('js-ready');
   // Cursor
   const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
@@ -571,13 +644,28 @@
   const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:0,rootMargin:'0px 0px -40px 0px'});
   document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
   setTimeout(()=>document.querySelectorAll('.reveal:not(.vis)').forEach(el=>el.classList.add('vis')),1500);
-  // Form
-  function sendMsg(e){
-    e.preventDefault();
-    const btn=document.getElementById('sb');
-    btn.textContent='Sending...';btn.style.opacity='.7';
-    setTimeout(()=>{btn.textContent='Sent! I will reply soon.';btn.style.background='#16a34a';btn.style.opacity='1';e.target.reset();setTimeout(()=>{btn.textContent='Send Message';btn.style.background='';},3500);},1300);
+
+  // Hamburger mobile menu
+  const hamburger = document.getElementById('navHamburger');
+  const mobileMenu = document.getElementById('mobileMenu');
+
+  function openMob() {
+    mobileMenu.classList.add('open');
+    hamburger.classList.add('is-open');
+    hamburger.innerHTML = '&#10005;'; // X icon
+    document.body.style.overflow = 'hidden';
   }
-</script>
-</body>
-</html>
+  function closeMob() {
+    mobileMenu.classList.remove('open');
+    hamburger.classList.remove('is-open');
+    hamburger.innerHTML = '&#9776;'; // hamburger icon
+    document.body.style.overflow = '';
+  }
+  hamburger.addEventListener('click', () => {
+    mobileMenu.classList.contains('open') ? closeMob() : openMob();
+  });
+  // Close on back/escape
+  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeMob(); });
+
+  // Form
+  fun
