@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Siniar H17 — Podcast Film oleh Yahya Hamdallah</title>
+  <meta name="description" content="Siniar H17 — obrolan santai soal film dan dunia hiburan. Podcast oleh Yahya Hamdallah, tersedia di Spotify dan Apple Podcasts." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── PALETTE: Siniar H17 cover art
+       Royal blue base, white text, red accent ── */
+    :root {
+      --bg:       #1464d8;   /* cover art royal blue */
+      --surface:  #1058c8;   /* slightly deeper blue */
+      --card:     rgba(255,255,255,0.12);
+      --border:   rgba(255,255,255,0.18);
+      --text:     #ffffff;
+      --muted:    rgba(255,255,255,0.62);
+      --accent:   #e8321b;   /* cover art red */
+      --accent2:  #c02010;
+      --green:    #1db954;   /* Spotify green */
+      --apple:    #fc3c44;   /* Apple Podcasts */
+    }
+
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+      cursor: none;
+    }
+
+    /* ── Cursor ── */
+    #cur { position:fixed; width:10px; height:10px; background:#fff; border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:width .22s cubic-bezier(.34,1.56,.64,1),height .22s cubic-bezier(.34,1.56,.64,1),background .2s; box-shadow:0 0 0 2px rgba(255,255,255,.2); }
+    #cur-ring { position:fixed; width:36px; height:36px; border:1.5px solid rgba(255,255,255,.5); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:width .3s,height .3s; }
+    body.ch #cur { width:22px; height:22px; background:var(--text); box-shadow:none; }
+    body.ch #cur-ring { width:54px; height:54px; border-color:rgba(255,255,255,.3); }
+
+    /* ── Top bar ── */
+    .topbar {
+      position: fixed; top:0; left:0; right:0; z-index:100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 40px; height: 60px;
+      background: rgba(10,80,190,0.92);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+    .topbar-back {
+      display: flex; align-items: center; gap:10px;
+      text-decoration: none; color: var(--muted);
+      font-size: 13px; font-weight: 500;
+      transition: color .2s;
+    }
+    .topbar-back:hover { color: var(--text); }
+    .topbar-logo { font-family:"Playfair Display",serif; font-size:17px; color:var(--text); text-decoration:none; }
+    .topbar-logo span { color: var(--accent); }
+    .topbar-listen {
+      display: flex; align-items: center; gap:8px;
+      font-size: 12px; font-weight: 600; letter-spacing:.04em; text-transform:uppercase;
+      color: #fff; background: var(--accent);
+      padding: 8px 18px; border-radius: 100px; text-decoration:none;
+      transition: background .2s, transform .2s;
+    }
+    .topbar-listen:hover { background: var(--accent2); transform: scale(1.04); }
+
+    /* ── Hero ── */
+    #hero {
+      min-height: 100vh;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 120px 24px 80px;
+      position: relative; overflow: hidden;
+      text-align: center;
+    }
+    .hero-bg {
+      position: absolute; inset: 0; z-index: 0;
+      background: radial-gradient(ellipse 80% 60% at 50% 30%, rgba(255,255,255,.1) 0%, transparent 65%),
+                  radial-gradient(ellipse 60% 80% at 20% 80%, rgba(232,50,27,.12) 0%, transparent 65%);
+    }
+    .hero-grain {
+      position: absolute; inset: 0; pointer-events: none; z-index: 1;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 512 512' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23g)' opacity='0.06'/%3E%3C/svg%3E");
+      opacity: .7;
+    }
+
+    /* Cover art — centered, large */
+    .cover-wrap {
+      position: relative; z-index: 2;
+      width: 200px; height: 200px;
+      border-radius: 24px; overflow: hidden;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,.25),
+        0 32px 100px rgba(0,0,0,.35),
+        0 8px 24px rgba(0,0,0,.6);
+      margin-bottom: 40px;
+      animation: floatUp .8s .1s cubic-bezier(.22,1,.36,1) both;
+    }
+    .cover-wrap img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .cover-placeholder {
+      width: 100%; height: 100%;
+      background: rgba(255,255,255,.15);
+      display: flex; align-items: center; justify-content: center;
+      font-family: "Playfair Display", serif;
+      font-size: 56px; color: #fff;
+      letter-spacing: -.04em;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap:8px;
+      background: rgba(255,255,255,.15); border:1px solid rgba(255,255,255,.35);
+      border-radius: 100px; padding: 5px 14px;
+      font-size: 11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+      color: #fff; margin-bottom: 20px;
+      animation: floatUp .7s .3s cubic-bezier(.22,1,.36,1) both;
+      position: relative; z-index: 2;
+    }
+    .hero-badge::before { content:""; width:6px; height:6px; border-radius:50%; background:#fff; animation:blink 2s infinite; }
+    @keyframes blink { 0%,100%{opacity:1;transform:scale(1);}50%{opacity:.3;transform:scale(1.5);} }
+
+    .hero-title {
+      font-family: "Playfair Display", serif;
+      font-size: clamp(52px, 9vw, 108px);
+      line-height: .92; letter-spacing: -.04em;
+      color: var(--text);
+      position: relative; z-index: 2;
+      animation: floatUp .9s .4s cubic-bezier(.22,1,.36,1) both;
+    }
+    .hero-title em {
+      font-style: italic;
+      background: linear-gradient(135deg, #fff, rgba(255,255,255,.75));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    }
+    .hero-sub {
+      margin-top: 16px; font-size: 17px; font-weight: 300; color: var(--muted);
+      position: relative; z-index: 2;
+      animation: floatUp .9s .55s cubic-bezier(.22,1,.36,1) both;
+    }
+    .hero-desc {
+      margin-top: 28px; font-size: 16px; font-weight: 300; color: var(--muted);
+      max-width: 560px; line-height: 1.75;
+      position: relative; z-index: 2;
+      animation: floatUp .9s .65s cubic-bezier(.22,1,.36,1) both;
+    }
+    .hero-desc strong { color: var(--text); font-weight: 500; }
+
+    /* Listen buttons */
+    .listen-btns {
+      display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;
+      margin-top: 40px;
+      position: relative; z-index: 2;
+      animation: floatUp .9s .75s cubic-bezier(.22,1,.36,1) both;
+    }
+    .btn-spotify {
+      display: flex; align-items: center; gap:10px;
+      padding: 14px 26px; border-radius: 100px;
+      background: var(--green); color: #000;
+      font-size: 14px; font-weight: 700; text-decoration: none;
+      transition: transform .25s, box-shadow .25s;
+      box-shadow: 0 4px 20px rgba(29,185,84,.35);
+    }
+    .btn-spotify:hover { transform: scale(1.05); box-shadow: 0 8px 32px rgba(29,185,84,.5); }
+    .btn-apple {
+      display: flex; align-items: center; gap:10px;
+      padding: 14px 26px; border-radius: 100px;
+      background: rgba(255,255,255,.18); color: #fff;
+      border: 1px solid rgba(255,255,255,.3);
+      font-size: 14px; font-weight: 600; text-decoration: none;
+      transition: background .2s, transform .25s;
+      backdrop-filter: blur(8px);
+    }
+    .btn-apple:hover { background: rgba(255,255,255,.14); transform: scale(1.05); }
+
+    /* Scroll hint */
+    .hero-scroll { position:absolute; bottom:36px; left:50%; transform:translateX(-50%); display:flex; flex-direction:column; align-items:center; gap:6px; opacity:.4; z-index:2; animation: floatUp 1s 1.2s cubic-bezier(.22,1,.36,1) both; }
+    .hero-scroll span { font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); }
+    .hero-scroll-line { width:1px; height:40px; background:linear-gradient(to bottom,rgba(255,255,255,.6),transparent); animation:sPulse 2.2s ease-in-out infinite; }
+    @keyframes sPulse{0%,100%{opacity:.3;}50%{opacity:1;}}
+
+    /* ── Stats bar ── */
+    .stats-bar {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .stats-inner {
+      max-width: 900px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: center;
+      padding: 36px 24px; gap: 0;
+    }
+    .stat-item { flex: 1; text-align: center; }
+    .stat-item + .stat-item { border-left: 1px solid var(--border); }
+    .stat-n { font-family:"Playfair Display",serif; font-size: 42px; letter-spacing:-.04em; color: #fff; line-height:1; }
+    .stat-l { font-size: 11px; color: var(--muted); margin-top: 6px; text-transform: uppercase; letter-spacing: .07em; font-weight: 500; }
+
+    /* ── Sections ── */
+    section { padding: 100px 24px; }
+    .container { max-width: 900px; margin: 0 auto; }
+    .s-label { font-size: 11px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--accent); margin-bottom: 14px; }
+    .s-title { font-family:"Playfair Display",serif; font-size: clamp(32px,4.5vw,52px); line-height:1.05; letter-spacing:-.03em; color:var(--text); }
+    .s-title em { font-style:italic; color:var(--muted); }
+
+    /* ── Reveal ── */
+    .reveal { opacity:1; transform:none; transition:opacity .85s cubic-bezier(.22,1,.36,1),transform .85s cubic-bezier(.22,1,.36,1); }
+    body.js-ready .reveal { opacity:0; transform:translateY(24px); }
+    body.js-ready .reveal.vis { opacity:1; transform:none; }
+    .rd1{transition-delay:.1s;}.rd2{transition-delay:.2s;}.rd3{transition-delay:.25s;}
+
+    /* ── About the show ── */
+    #about { background: var(--bg); }
+    .about-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 72px; margin-top: 60px; align-items: start; }
+    .about-text { font-size: 17px; font-weight: 300; color: var(--muted); line-height: 1.8; }
+    .about-text p + p { margin-top: 18px; }
+    .about-text strong { color: var(--text); font-weight: 600; }
+    .about-details { display: flex; flex-direction: column; gap: 14px; }
+    .detail-row {
+      display: flex; align-items: flex-start; gap: 16px;
+      padding: 18px 20px;
+      background: rgba(255,255,255,.12); border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.18);
+      transition: border-color .2s, transform .25s;
+    }
+    .detail-row:hover { border-color: rgba(255,255,255,.45); transform: translateX(4px); }
+    .detail-icon { font-size: 20px; flex-shrink: 0; margin-top: 1px; }
+    .detail-body { display: flex; flex-direction: column; gap: 2px; }
+    .detail-label { font-size: 11px; font-weight: 700; letter-spacing:.09em; text-transform:uppercase; color:rgba(255,255,255,.75); }
+    .detail-value { font-size: 14px; color: rgba(255,255,255,.9); font-weight: 400; }
+
+    /* ── Episodes ── */
+    #episodes { background: rgba(0,0,0,.15); border-top: 1px solid rgba(255,255,255,.15); }
+    .episodes-list { display: flex; flex-direction: column; gap: 12px; margin-top: 52px; }
+    .ep {
+      display: flex; align-items: center; gap: 20px;
+      padding: 20px 24px; border-radius: 18px;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.18);
+      text-decoration: none; color: inherit;
+      transition: border-color .2s, background .2s, transform .25s;
+      cursor: none;
+    }
+    .ep:hover { border-color: rgba(255,255,255,.4); background: rgba(255,255,255,.08); transform: translateX(6px); }
+    .ep-num {
+      font-family: "Playfair Display", serif;
+      font-size: 28px; letter-spacing:-.04em;
+      color: rgba(255,255,255,.2);
+      flex-shrink: 0; width: 40px; text-align: right;
+      font-style: italic;
+    }
+    .ep-divider { width: 1px; height: 36px; background: rgba(255,255,255,.2); flex-shrink: 0; }
+    .ep-body { flex: 1; }
+    .ep-date { font-size: 11px; font-weight: 600; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.75); margin-bottom: 4px; }
+    .ep-title { font-family: "Playfair Display", serif; font-size: 17px; letter-spacing:-.02em; color: var(--text); margin-bottom: 4px; font-style: italic; }
+    .ep-desc { font-size: 13px; color: var(--muted); line-height: 1.55; font-weight: 300; }
+    .ep-arrow { font-size: 16px; color: var(--muted); flex-shrink: 0; transition: color .2s, transform .25s; }
+    .ep:hover .ep-arrow { color: #fff; transform: translateX(4px); }
+
+    .episodes-note {
+      margin-top: 24px; text-align: center;
+      font-size: 14px; color: var(--muted); font-weight: 300;
+    }
+    .episodes-note a { color: #fff; text-decoration: none; font-weight: 600; }
+    .episodes-note a:hover { text-decoration: underline; }
+
+    /* ── Listen section ── */
+    #listen { background: var(--bg); }
+    .listen-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 52px; }
+    .listen-card {
+      display: flex; align-items: center; gap: 18px;
+      padding: 28px 24px; border-radius: 22px;
+      text-decoration: none; color: inherit;
+      border: 1px solid var(--border);
+      transition: transform .3s cubic-bezier(.34,1.56,.64,1), border-color .2s, box-shadow .3s;
+    }
+    .listen-card:hover { transform: translateY(-6px) scale(1.01); }
+    .listen-card.spotify { background: rgba(0,0,0,.2); border-color: rgba(255,255,255,.2); }
+    .listen-card.spotify:hover { border-color: rgba(29,185,84,.6); box-shadow: 0 16px 48px rgba(29,185,84,.2); }
+    .listen-card.apple { background: rgba(0,0,0,.2); border-color: rgba(255,255,255,.2); }
+    .listen-card.apple:hover { border-color: rgba(252,60,68,.4); box-shadow: 0 16px 48px rgba(252,60,68,.15); }
+    .listen-logo { width: 52px; height: 52px; border-radius: 14px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .listen-logo.sp { background: var(--green); }
+    .listen-logo.ap { background: var(--apple); }
+    .listen-info { flex: 1; }
+    .listen-platform { font-size: 12px; font-weight: 700; letter-spacing:.08em; text-transform:uppercase; color:rgba(255,255,255,.65); margin-bottom: 4px; }
+    .listen-action { font-family: "Playfair Display", serif; font-size: 20px; letter-spacing:-.02em; color: var(--text); }
+    .listen-arr { font-size: 18px; color: var(--muted); flex-shrink:0; transition: color .2s, transform .25s; }
+    .listen-card:hover .listen-arr { color: #fff; transform: translateX(4px); }
+
+    /* ── Host ── */
+    #host { background: rgba(0,0,0,.15); border-top: 1px solid rgba(255,255,255,.15); }
+    .host-layout { display: grid; grid-template-columns: auto 1fr; gap: 48px; align-items: center; margin-top: 56px; }
+    .host-photo { width: 140px; height: 140px; border-radius: 50%; overflow:hidden; border: 2px solid rgba(255,255,255,.4); box-shadow: 0 0 0 4px rgba(255,255,255,.1); flex-shrink: 0; }
+    .host-photo img { width:100%; height:100%; object-fit:cover; display:block; }
+    .host-name { font-family: "Playfair Display", serif; font-size: 28px; letter-spacing:-.03em; color: #fff; margin-bottom: 6px; }
+    .host-role { font-size: 13px; font-weight: 600; letter-spacing:.08em; text-transform:uppercase; color: var(--accent); margin-bottom: 16px; }
+    .host-bio { font-size: 16px; font-weight: 300; color: var(--muted); line-height: 1.75; }
+    .host-bio strong { color: var(--text); font-weight: 600; }
+    .host-links { display: flex; gap: 10px; margin-top: 22px; flex-wrap: wrap; }
+    .host-link {
+      display: flex; align-items: center; gap: 8px;
+      padding: 9px 16px; border-radius: 100px;
+      border: 1px solid var(--border);
+      font-size: 13px; color: var(--muted); text-decoration: none;
+      transition: border-color .2s, color .2s, background .2s;
+    }
+    .host-link:hover { border-color: rgba(255,255,255,.5); color: #fff; background: rgba(255,255,255,.1); }
+
+    /* ── Footer ── */
+    footer {
+      background: rgba(0,0,0,.25);
+      border-top: 1px solid rgba(255,255,255,.15);
+      padding: 36px 40px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .f-logo { font-family:"Playfair Display",serif; font-size:17px; color:rgba(255,255,255,.7); }
+    .f-logo span { color: var(--accent); }
+    .f-copy { font-size: 12px; color: rgba(255,255,255,.4); }
+    .f-back { font-size: 12px; color: rgba(255,255,255,.5); text-decoration:none; transition:color .2s; }
+    .f-back:hover { color: #fff; }
+
+    @keyframes floatUp { from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;} }
+
+    @media(max-width:768px){
+      .topbar { padding: 0 20px; }
+      .topbar-listen { display: none; }
+      .about-layout,.host-layout,.listen-cards { grid-template-columns:1fr; gap:36px; }
+      .host-layout { grid-template-columns: 1fr; }
+      .stats-inner { flex-direction: column; gap: 28px; }
+      .stat-item + .stat-item { border-left: none; border-top: 1px solid rgba(255,255,255,.15); padding-top: 28px; }
+      footer { flex-direction: column; gap: 12px; text-align: center; }
+      #cur,#cur-ring { display:none; } body { cursor: auto; }
+    }
+  </style>
+</head>
+<body>
+<div id="cur"></div>
+<div id="cur-ring"></div>
+
+<!-- TOP BAR -->
+<header class="topbar">
+  <a href="index.html" class="topbar-back">&#8592; Back to Portfolio</a>
+  <a href="index.html" class="topbar-logo">Y<span>.</span>H</a>
+  <a href="https://open.spotify.com/show/siniarh17" target="_blank" class="topbar-listen">&#127897; Listen Now</a>
+</header>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grain"></div>
+
+  <div class="cover-wrap">
+    <img
+      src="https://pod-engine-public.nyc3.cdn.digitaloceanspaces.com/images/kkAJiUr1T505al2ud6j9FwyEffxMI44r2EFiHZKxshY.png"
+      alt="Siniar H17 Podcast Cover"
+      onerror="this.parentElement.innerHTML='<div class=&quot;cover-placeholder&quot;>H17</div>'"
+    />
+  </div>
+
+  <div class="hero-badge">Podcast &middot; Film &amp; Hiburan &middot; Indonesia</div>
+
+  <h1 class="hero-title">Siniar<br><em>H17</em></h1>
+
+  <p class="hero-sub">Obrolan santai soal film &mdash; tanpa basa-basi.</p>
+
+  <p class="hero-desc">
+    Selamat datang di <strong>Siniar H17</strong> &mdash; tempat ngobrolin film yang lagi trending, ulasan santai, dan semua hal menarik di dunia sinema.
+    <em>Ngapain serius? Yang penting nonton dulu.</em>
+  </p>
+
+  <div class="listen-btns">
+    <a href="https://podcasters.spotify.com/pod/show/siniarh17" target="_blank" class="btn-spotify">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+      Dengar di Spotify
+    </a>
+    <a href="https://podcasts.apple.com/us/podcast/id1488790358" target="_blank" class="btn-apple">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style="color:#fc3c44"><path d="M12 0C8.688 0 5.952.042 4.43.563 2.7 1.146 1.146 2.7.563 4.43.042 5.952 0 8.688 0 12s.042 6.048.563 7.57c.583 1.73 2.137 3.284 3.867 3.867 1.522.521 4.258.563 7.57.563s6.048-.042 7.57-.563c1.73-.583 3.284-2.137 3.867-3.867.521-1.522.563-4.258.563-7.57s-.042-6.048-.563-7.57C23.854 2.7 22.3 1.146 20.57.563 19.048.042 16.312 0 12 0zm.188 5.4c1.176 0 2.25.462 3.034 1.218a4.252 4.252 0 011.192 3.15 4.252 4.252 0 01-1.192 3.15 4.296 4.296 0 01-3.034 1.218 4.296 4.296 0 01-3.034-1.218A4.252 4.252 0 017.962 9.768a4.252 4.252 0 011.192-3.15A4.296 4.296 0 0112.188 5.4zm0 1.8a2.496 2.496 0 00-2.496 2.568 2.496 2.496 0 002.496 2.496 2.496 2.496 0 002.496-2.496 2.496 2.496 0 00-2.496-2.568zm4.38 8.316c.366.108.588.474.48.84-.39 1.362-1.602 2.292-3.018 2.292h-3.66c-1.416 0-2.628-.93-3.018-2.292a.666.666 0 01.48-.84c.366-.108.732.114.84.48.228.798.966 1.352 1.698 1.352h3.66c.732 0 1.47-.554 1.698-1.352.108-.366.474-.588.84-.48z"/></svg>
+      Apple Podcasts
+    </a>
+  </div>
+
+  <div class="hero-scroll"><span>Explore</span><div class="hero-scroll-line"></div></div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat-item reveal">
+      <div class="stat-n">28</div>
+      <div class="stat-l">Episodes</div>
+    </div>
+    <div class="stat-item reveal rd1">
+      <div class="stat-n">2024</div>
+      <div class="stat-l">Since June</div>
+    </div>
+    <div class="stat-item reveal rd2">
+      <div class="stat-n">2x</div>
+      <div class="stat-l">Per Month</div>
+    </div>
+    <div class="stat-item reveal rd3">
+      <div class="stat-n">&#127470;&#127465;</div>
+      <div class="stat-l">Bahasa Indonesia</div>
+    </div>
+  </div>
+</div>
+
+<!-- ABOUT THE SHOW -->
+<section id="about">
+  <div class="container">
+    <p class="s-label reveal">Tentang Podcast</p>
+    <h2 class="s-title reveal rd1">Sinema, santai,<br>&amp; <em>jujur.</em></h2>
+
+    <div class="about-layout">
+      <div class="reveal rd2">
+        <div class="about-text">
+          <p>
+            <strong>Siniar H17</strong> adalah podcast film berbahasa Indonesia yang hadir untuk semua pencinta sinema &mdash;
+            dari yang nonton Criterion Collection sampai yang baru selesai nonton film Jumbo.
+          </p>
+          <p>
+            Di sini, kami bahas film-film yang lagi trending, ngasih ulasan yang jujur, dan ngomongin hal-hal menarik dari dunia hiburan
+            tanpa perlu terlalu serius. <strong>Santai aja dulu.</strong>
+          </p>
+          <p>
+            Episode baru hadir setiap dua minggu sekali &mdash; atau lebih tepatnya, setiap kali kami selesai nonton film yang layak diobrolin.
+          </p>
+        </div>
+      </div>
+
+      <div class="reveal rd3">
+        <div class="about-details">
+          <div class="detail-row">
+            <div class="detail-icon">&#127909;</div>
+            <div class="detail-body">
+              <div class="detail-label">Topik Utama</div>
+              <div class="detail-value">Ulasan film, tren sinema, industri hiburan global</div>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-icon">&#128337;</div>
+            <div class="detail-body">
+              <div class="detail-label">Jadwal</div>
+              <div class="detail-value">Bi-weekly &mdash; setiap dua minggu sekali</div>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-icon">&#127757;</div>
+            <div class="detail-body">
+              <div class="detail-label">Bahasa</div>
+              <div class="detail-value">Bahasa Indonesia</div>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-icon">&#128197;</div>
+            <div class="detail-body">
+              <div class="detail-label">Mulai Tayang</div>
+              <div class="detail-value">25 Juni 2024</div>
+            </div>
+          </div>
+          <div class="detail-row">
+            <div class="detail-icon">&#127897;</div>
+            <div class="detail-body">
+              <div class="detail-label">Tersedia di</div>
+              <div class="detail-value">Spotify &amp; Apple Podcasts</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EPISODES -->
+<section id="episodes">
+  <div class="container">
+    <p class="s-label reveal">Episode Terbaru</p>
+    <h2 class="s-title reveal rd1">Yang sudah<br>kami <em>obrolin.</em></h2>
+
+    <div class="episodes-list">
+
+      <a href="https://podcasters.spotify.com/pod/show/siniarh17" target="_blank" class="ep reveal rd1">
+        <div class="ep-num">28</div>
+        <div class="ep-divider"></div>
+        <div class="ep-body">
+          <div class="ep-date">Agustus 2025</div>
+          <div class="ep-title">Fantastic Four is Back &mdash; Tapi Apakah Bagus?</div>
+          <div class="ep-desc">Kami akhirnya nonton Fantastic Four yang baru. Apakah Marvel berhasil comeback dengan proper? Atau masih ada yang kurang? Spoiler: ada pendapat yang cukup panas.</div>
+        </div>
+        <div class="ep-arrow">&#8594;</div>
+      </a>
+
+      <a href="https://podcasters.spotify.com/pod/show/siniarh17" target="_blank" class="ep reveal rd2">
+        <div class="ep-num">27</div>
+        <div class="ep-divider"></div>
+        <div class="ep-body">
+          <div class="ep-date">Juli 2025</div>
+          <div class="ep-title">Apa Aja yang Kami Lewatkan di 2025 Selama Hiatus?</div>
+          <div class="ep-desc">Balik lagi setelah hiatus! Di episode ini kami ngebahas semua film dan momen sinema yang sempat kami lewatkan selama off &mdash; plus update apa yang ada di wishlist nonton kami.</div>
+        </div>
+        <div class="ep-arrow">&#8594;</div>
+      </a>
+
+      <a href="https://podcasters.spotify.com/pod/show/siniarh17" target="_blank" class="ep reveal rd3">
+        <div class="ep-num">26</div>
+        <div class="ep-divider"></div>
+        <div class="ep-body">
+          <div class="ep-date">Juli 2025</div>
+          <div class="ep-title">Ulasan: &ldquo;Sore &mdash; Istri dari Masa Depan&rdquo;</div>
+          <div class="ep-desc">Ulasan kami untuk <em>Sore Istri dari Masa Depan</em> &mdash; series karya Yandy Laurens yang bikin banyak orang nangis. Terima kasih, Yandy Laurens. (Spoiler: plotnya ada.)</div>
+        </div>
+        <div class="ep-arrow">&#8594;</div>
+      </a>
+
+      <a href="https://podcasters.spotify.com/pod/show/siniarh17" target="_blank" class="ep reveal rd1">
+        <div class="ep-num">1&ndash;25</div>
+        <div class="ep-divider"></div>
+        <div class="ep-body">
+          <div class="ep-date">Jun 2024 &mdash; Jun 2025</div>
+          <div class="ep-title">25+ Episode Sebelumnya &mdash; Semua Ada di Spotify</div>
+          <div class="ep-desc">Dari ulasan film perdana kami sampai episode yang bikin debat sengit, semua arsip episode tersedia lengkap di Spotify dan Apple Podcasts.</div>
+        </div>
+        <div class="ep-arrow">&#8594;</div>
+      </a>
+
+    </div>
+
+    <p class="episodes-note reveal" style="margin-top:32px;">
+      Mau dengerin semua episode? &#8594;
+      <a href="https://podcasters.spotify.com/pod/show/siniarh17" target="_blank">Buka di Spotify</a>
+      &nbsp;atau&nbsp;
+      <a href="https://podcasts.apple.com/us/podcast/id1488790358" target="_blank">Apple Podcasts</a>
+    </p>
+  </div>
+</section>
+
+<!-- LISTEN ON -->
+<section id="listen">
+  <div class="container">
+    <p class="s-label reveal">Dengerin Sekarang</p>
+    <h2 class="s-title reveal rd1">Tersedia di<br><em>semua platform.</em></h2>
+
+    <div class="listen-cards">
+      <a href="https://podcasters.spotify.com/pod/show/siniarh17" target="_blank" class="listen-card spotify reveal rd1">
+        <div class="listen-logo sp">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="#000"><path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/></svg>
+        </div>
+        <div class="listen-info">
+          <div class="listen-platform">Streaming</div>
+          <div class="listen-action">Buka di Spotify</div>
+        </div>
+        <div class="listen-arr">&#8594;</div>
+      </a>
+
+      <a href="https://podcasts.apple.com/us/podcast/id1488790358" target="_blank" class="listen-card apple reveal rd2">
+        <div class="listen-logo ap">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M18.9 0H5.1C2.3 0 0 2.3 0 5.1v13.8C0 21.7 2.3 24 5.1 24h13.8C21.7 24 24 21.7 24 18.9V5.1C24 2.3 21.7 0 18.9 0zm-6.7 4.8c2.7 0 4.9 2.2 4.9 4.9 0 1.8-1 3.4-2.4 4.2v4.5c0 1.4-1.1 2.5-2.5 2.5s-2.5-1.1-2.5-2.5v-4.5c-1.4-.8-2.4-2.4-2.4-4.2 0-2.7 2.2-4.9 4.9-4.9z"/></svg>
+        </div>
+        <div class="listen-info">
+          <div class="listen-platform">Apple</div>
+          <div class="listen-action">Apple Podcasts</div>
+        </div>
+        <div class="listen-arr">&#8594;</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- HOST -->
+<section id="host">
+  <div class="container">
+    <p class="s-label reveal">Host</p>
+    <h2 class="s-title reveal rd1">Siapa di balik<br><em>mikrofon.</em></h2>
+
+    <div class="host-layout">
+      <div class="reveal rd1">
+        <div class="host-photo">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=280&h=280&fit=crop&crop=face" alt="Yahya Hamdallah" />
+        </div>
+      </div>
+      <div class="reveal rd2">
+        <div class="host-name">Yahya Hamdallah</div>
+        <div class="host-role">Co-host &amp; Writer &middot; Siniar H17</div>
+        <div class="host-bio">
+          <p>
+            Yahya adalah mahasiswa Televisi dan Film di <strong>Universitas Padjadjaran</strong> dengan IPK 3.84.
+            Sebagai scriptwriter, content creator, dan pencinta film, Yahya membawa perspektif yang segar dan jujur ke setiap obrolan.
+          </p>
+          <p style="margin-top:12px;">
+            Di luar podcast, Yahya aktif dalam produksi film pendek, pernah magang di <strong>Kompas TV Jawa Barat</strong>,
+            dan terus berkarya di dunia kreatif.
+          </p>
+        </div>
+        <div class="host-links">
+          <a href="index.html" class="host-link">&#127758; Full Portfolio</a>
+          <a href="https://www.linkedin.com/in/yahyahmdllh/" target="_blank" class="host-link">&#128188; LinkedIn</a>
+          <a href="/cdn-cgi/l/email-protection#ec958d84958d848188808084ac83999880838387c28f8381" class="host-link">&#9993;&#65039; Email</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="f-logo">Y<span>.</span>H</div>
+  <div class="f-copy">&#169; 2025 Siniar H17 &middot; Yahya Hamdallah</div>
+  <a href="index.html" class="f-back">&#8592; Back to Portfolio</a>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  document.body.classList.add("js-ready");
+
+  // Cursor
+  const cur=document.getElementById("cur"),ring=document.getElementById("cur-ring");
+  let mx=0,my=0,rx=0,ry=0;
+  document.addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+"px";cur.style.top=my+"px";});
+  (function loop(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+"px";ring.style.top=ry+"px";requestAnimationFrame(loop);})();
+  document.querySelectorAll("a,.ep,.listen-card,.detail-row").forEach(el=>{
+    el.addEventListener("mouseenter",()=>document.body.classList.add("ch"));
+    el.addEventListener("mouseleave",()=>document.body.classList.remove("ch"));
+  });
+
+  // Reveal
+  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add("vis");});},{threshold:0,rootMargin:"0px 0px -30px 0px"});
+  document.querySelectorAll(".reveal").forEach(e
