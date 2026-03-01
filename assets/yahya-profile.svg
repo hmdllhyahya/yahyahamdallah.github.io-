@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="1200" viewBox="0 0 900 1200" role="img" aria-label="Yahya profile placeholder">
+  <defs>
+    <linearGradient id="g" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#f4f4f4"/>
+      <stop offset="100%" stop-color="#d9d9d9"/>
+    </linearGradient>
+  </defs>
+  <rect width="900" height="1200" fill="#121212"/>
+  <rect x="0" y="0" width="900" height="380" fill="#f8f8f8"/>
+  <g transform="translate(60,220) rotate(-23)">
+    <rect width="520" height="70" fill="#1a1a1a"/>
+    <rect x="14" width="70" height="70" fill="#f0f0f0"/>
+    <rect x="98" width="70" height="70" fill="#a0a0a0"/>
+    <rect x="182" width="70" height="70" fill="#f0f0f0"/>
+    <rect x="266" width="70" height="70" fill="#a0a0a0"/>
+    <rect x="350" width="70" height="70" fill="#f0f0f0"/>
+    <rect x="434" width="70" height="70" fill="#a0a0a0"/>
+  </g>
+  <rect x="170" y="560" width="590" height="430" rx="14" fill="url(#g)" stroke="#222" stroke-width="4" transform="rotate(-10 465 775)"/>
+  <text x="270" y="690" font-family="Arial, Helvetica, sans-serif" font-size="62" fill="#111" transform="rotate(-10 270 690)">TAKE · SHOT · ACT</text>
+  <text x="340" y="780" font-family="Arial, Helvetica, sans-serif" font-size="72" font-weight="700" fill="#111" transform="rotate(-10 340 780)">SCENE 1</text>
+  <g>
+    <rect x="430" y="350" width="360" height="780" rx="16" fill="#0f0f0f"/>
+    <ellipse cx="610" cy="430" rx="118" ry="130" fill="#303030"/>
+  </g>
+  <text x="450" y="1130" font-family="Arial, Helvetica, sans-serif" font-size="34" fill="#f2f2f2">Yahya Hamdallah</text>
+</svg>
