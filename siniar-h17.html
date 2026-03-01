@@ -38,8 +38,9 @@
     body.menu-open { overflow: hidden; }
 
     /* ── Cursor ── */
-    #cur { position:fixed; width:10px; height:10px; background:#fff; border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:width .22s cubic-bezier(.34,1.56,.64,1),height .22s cubic-bezier(.34,1.56,.64,1),background .2s; box-shadow:0 0 0 2px rgba(255,255,255,.2); }
-    #cur-ring { position:fixed; width:36px; height:36px; border:1.5px solid rgba(255,255,255,.5); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:width .3s,height .3s; }
+    #cur { position:fixed; width:10px; height:10px; background:#fff; border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:width .22s cubic-bezier(.34,1.56,.64,1),height .22s cubic-bezier(.34,1.56,.64,1),background .2s; box-shadow:0 0 0 2px rgba(255,255,255,.2); opacity:0; }
+    #cur-ring { position:fixed; width:36px; height:36px; border:1.5px solid rgba(255,255,255,.5); border-radius:50%; pointer-events:none; z-index:9998; transform:translate(-50%,-50%); transition:width .3s,height .3s; opacity:0; }
+    body.cursor-active #cur, body.cursor-active #cur-ring { opacity:1; }
     body.ch #cur { width:22px; height:22px; background:var(--text); box-shadow:none; }
     body.ch #cur-ring { width:54px; height:54px; border-color:rgba(255,255,255,.3); }
 
@@ -738,13 +739,113 @@
 
   // Cursor
   const cur=document.getElementById("cur"),ring=document.getElementById("cur-ring");
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener("mousemove",e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+"px";cur.style.top=my+"px";});
-  (function loop(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+"px";ring.style.top=ry+"px";requestAnimationFrame(loop);})();
-  document.querySelectorAll("a,.ep,.listen-card,.detail-row").forEach(el=>{
-    el.addEventListener("mouseenter",()=>document.body.classList.add("ch"));
-    el.addEventListener("mouseleave",()=>document.body.classList.remove("ch"));
-  });
+  let mx=window.innerWidth/2,my=window.innerHeight/2,rx=mx,ry=my;
+  let cursorActive=false;
+
+  if (cur && ring && !window.matchMedia("(pointer: coarse)").matches) {
+    document.addEventListener("mousemove",e=>{
+      mx=e.clientX;my=e.clientY;
+      cur.style.left=mx+"px";cur.style.top=my+"px";
+      if (!cursorActive) {
+        cursorActive=true;
+        document.body.classList.add("cursor-active");
+      }
+    });
+
+    (function loop(){
+      rx+=(mx-rx)*.1;ry+=(my-ry)*.1;
+      ring.style.left=rx+"px";ring.style.top=ry+"px";
+      requestAnimationFrame(loop);
+    })();
+
+    document.querySelectorAll("a,button,.ep,.listen-card,.detail-row").forEach(el=>{
+      el.addEventListener("mouseenter",()=>document.body.classList.add("ch"));
+      el.addEventListener("mouseleave",()=>document.body.classList.remove("ch"));
+    });
+  }
+
+
+  // Topbar dropdown menu
+  const menuBtn = document.getElementById("menuBtn");
+  const topbarDropdown = document.getElementById("topbarDropdown");
+
+  function openTopbarMenu() {
+    if (!menuBtn || !topbarDropdown) return;
+    topbarDropdown.classList.add("open");
+    menuBtn.classList.add("is-open");
+    menuBtn.setAttribute("aria-expanded", "true");
+    menuBtn.textContent = "✕";
+    document.body.classList.add("menu-open");
+  }
+
+  function closeTopbarMenu() {
+    if (!menuBtn || !topbarDropdown) return;
+    topbarDropdown.classList.remove("open");
+    menuBtn.classList.remove("is-open");
+    menuBtn.setAttribute("aria-expanded", "false");
+    menuBtn.textContent = "☰";
+    document.body.classList.remove("menu-open");
+  }
+
+  if (menuBtn && topbarDropdown) {
+    menuBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      topbarDropdown.classList.contains("open") ? closeTopbarMenu() : openTopbarMenu();
+    });
+
+    topbarDropdown.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", closeTopbarMenu);
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!topbarDropdown.classList.contains("open")) return;
+      if (topbarDropdown.contains(event.target) || menuBtn.contains(event.target)) return;
+      closeTopbarMenu();
+    });
+
+    const closeOnOutsideScroll = (event) => {
+      if (!topbarDropdown.classList.contains("open")) return;
+      if (topbarDropdown.contains(event.target) || menuBtn.contains(event.target)) return;
+      closeTopbarMenu();
+    };
+
+    document.addEventListener("wheel", closeOnOutsideScroll, { passive: true });
+    document.addEventListener("touchmove", closeOnOutsideScroll, { passive: true });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeTopbarMenu();
+    });
+  }
+
+  // Normalize direct Spotify links into embeddable URLs for latest episode
+  const latestEpisodeEmbed = document.getElementById("latestEpisodeEmbed");
+  const toSpotifyEmbedUrl = (url) => {
+    if (!url) return "";
+    const trimmed = String(url).trim();
+    const matchers = [
+      { pattern: /open\.spotify\.com\/(episode|show)\/([A-Za-z0-9]+)/i, kind: 1, id: 2 },
+      { pattern: /open\.spotify\.com\/embed\/(episode|show)\/([A-Za-z0-9]+)/i, kind: 1, id: 2 },
+      { pattern: /spotify:(episode|show):([A-Za-z0-9]+)/i, kind: 1, id: 2 },
+      { pattern: /podcasters\.spotify\.com\/pod\/show\/[^\s/]+\/episodes\/[^\s/]*-([A-Za-z0-9]+)/i, kind: "episode", id: 1 }
+    ];
+
+    for (const cfg of matchers) {
+      const found = trimmed.match(cfg.pattern);
+      if (!found) continue;
+      const kind = cfg.kind === 1 ? found[cfg.kind] : cfg.kind;
+      const id = found[cfg.id];
+      return `https://open.spotify.com/embed/${kind.toLowerCase()}/${id}?utm_source=generator`;
+    }
+
+    return trimmed.includes("open.spotify.com/embed/") ? trimmed : "";
+  };
+
+  if (latestEpisodeEmbed) {
+    const directUrl = latestEpisodeEmbed.dataset.episodeUrl || latestEpisodeEmbed.src;
+    const normalizedEmbed = toSpotifyEmbedUrl(directUrl);
+    if (normalizedEmbed) latestEpisodeEmbed.src = normalizedEmbed;
+  }
+
 
 
   // Topbar dropdown menu
