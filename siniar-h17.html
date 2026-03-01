@@ -419,6 +419,7 @@
   <a href="index.html" class="topbar-logo">Y<span>.</span>H</a>
   <div class="topbar-right">
     <a href="https://podcasters.spotify.com/pod/show/siniarh17" target="_blank" rel="noopener noreferrer" class="topbar-listen">&#127897; Listen Now</a>
+    <a href="https://open.spotify.com/show/siniarh17" target="_blank" rel="noopener noreferrer" class="topbar-listen">&#127897; Listen Now</a>
     <button class="topbar-menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
   </div>
 </header>
@@ -483,6 +484,10 @@
           title="Latest Siniar H17 episode"
           data-episode-url="https://open.spotify.com/show/5f9V8SrjR3uG4A3K1wXbX2"
           src="https://open.spotify.com/embed/show/5f9V8SrjR3uG4A3K1wXbX2?utm_source=generator"
+          data-episode-url="https://open.spotify.com/episode/4M0Dw7v6pu9fM6Y4AvFlNt"
+          src="https://open.spotify.com/embed/episode/4M0Dw7v6pu9fM6Y4AvFlNt?utm_source=generator"
+          title="Latest Siniar H17 episode on Spotify"
+          src="https://open.spotify.com/episode/0HA1vgWo1HDBwDAsCKnnjS?si=s-ZtJcNmRLqgEgdCJwgsnQ"
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
           loading="lazy">
         </iframe>
@@ -804,6 +809,8 @@
       { pattern: /open\.spotify\.com\/embed\/(episode|show)\/([A-Za-z0-9]+)/i, kind: 1, id: 2 },
       { pattern: /spotify:(episode|show):([A-Za-z0-9]+)/i, kind: 1, id: 2 },
       { pattern: /podcasters\.spotify\.com\/pod\/show\/[^\s/]+\/episodes\/[^\s/]*-([A-Za-z0-9]+)/i, kind: "episode", id: 1 }
+      { pattern: /podcasters\.spotify\.com\/pod\/show\/[^\s/]+\/episodes\/[^\s/]*-([A-Za-z0-9]+)/i, kind: "episode", id: 1 },
+      { pattern: /podcasters\.spotify\.com\/pod\/show\/([A-Za-z0-9]+)/i, kind: "show", id: 1 }
     ];
 
     for (const cfg of matchers) {
