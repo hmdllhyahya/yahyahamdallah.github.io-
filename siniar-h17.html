@@ -420,6 +420,7 @@
   <a href="index.html" class="topbar-logo">Y<span>.</span>H</a>
   <div class="topbar-right">
     <a href="https://podcasters.spotify.com/pod/show/siniarh17" target="_blank" rel="noopener noreferrer" class="topbar-listen">&#127897; Listen Now</a>
+    <a href="https://open.spotify.com/show/siniarh17" target="_blank" rel="noopener noreferrer" class="topbar-listen">&#127897; Listen Now</a>
     <button class="topbar-menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
   </div>
 </header>
@@ -484,6 +485,10 @@
           title="Latest Siniar H17 episode"
           data-episode-url="https://open.spotify.com/show/5f9V8SrjR3uG4A3K1wXbX2"
           src="https://open.spotify.com/embed/show/5f9V8SrjR3uG4A3K1wXbX2?utm_source=generator"
+          data-episode-url="https://open.spotify.com/episode/4M0Dw7v6pu9fM6Y4AvFlNt"
+          src="https://open.spotify.com/embed/episode/4M0Dw7v6pu9fM6Y4AvFlNt?utm_source=generator"
+          title="Latest Siniar H17 episode on Spotify"
+          src="https://open.spotify.com/episode/0HA1vgWo1HDBwDAsCKnnjS?si=s-ZtJcNmRLqgEgdCJwgsnQ"
           allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
           loading="lazy">
         </iframe>
@@ -822,6 +827,91 @@
       { pattern: /open\.spotify\.com\/embed\/(episode|show)\/([A-Za-z0-9]+)/i, kind: 1, id: 2 },
       { pattern: /spotify:(episode|show):([A-Za-z0-9]+)/i, kind: 1, id: 2 },
       { pattern: /podcasters\.spotify\.com\/pod\/show\/[^\s/]+\/episodes\/[^\s/]*-([A-Za-z0-9]+)/i, kind: "episode", id: 1 }
+    ];
+
+    for (const cfg of matchers) {
+      const found = trimmed.match(cfg.pattern);
+      if (!found) continue;
+      const kind = cfg.kind === 1 ? found[cfg.kind] : cfg.kind;
+      const id = found[cfg.id];
+      return `https://open.spotify.com/embed/${kind.toLowerCase()}/${id}?utm_source=generator`;
+    }
+
+    return trimmed.includes("open.spotify.com/embed/") ? trimmed : "";
+  };
+
+  if (latestEpisodeEmbed) {
+    const directUrl = latestEpisodeEmbed.dataset.episodeUrl || latestEpisodeEmbed.src;
+    const normalizedEmbed = toSpotifyEmbedUrl(directUrl);
+    if (normalizedEmbed) latestEpisodeEmbed.src = normalizedEmbed;
+  }
+
+
+
+  // Topbar dropdown menu
+  const menuBtn = document.getElementById("menuBtn");
+  const topbarDropdown = document.getElementById("topbarDropdown");
+
+  function openTopbarMenu() {
+    if (!menuBtn || !topbarDropdown) return;
+    topbarDropdown.classList.add("open");
+    menuBtn.classList.add("is-open");
+    menuBtn.setAttribute("aria-expanded", "true");
+    menuBtn.textContent = "✕";
+    document.body.classList.add("menu-open");
+  }
+
+  function closeTopbarMenu() {
+    if (!menuBtn || !topbarDropdown) return;
+    topbarDropdown.classList.remove("open");
+    menuBtn.classList.remove("is-open");
+    menuBtn.setAttribute("aria-expanded", "false");
+    menuBtn.textContent = "☰";
+    document.body.classList.remove("menu-open");
+  }
+
+  if (menuBtn && topbarDropdown) {
+    menuBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      topbarDropdown.classList.contains("open") ? closeTopbarMenu() : openTopbarMenu();
+    });
+
+    topbarDropdown.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", closeTopbarMenu);
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!topbarDropdown.classList.contains("open")) return;
+      if (topbarDropdown.contains(event.target) || menuBtn.contains(event.target)) return;
+      closeTopbarMenu();
+    });
+
+    const closeOnOutsideScroll = (event) => {
+      if (!topbarDropdown.classList.contains("open")) return;
+      if (topbarDropdown.contains(event.target) || menuBtn.contains(event.target)) return;
+      closeTopbarMenu();
+    };
+
+    document.addEventListener("wheel", closeOnOutsideScroll, { passive: true });
+    document.addEventListener("touchmove", closeOnOutsideScroll, { passive: true });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeTopbarMenu();
+    });
+  }
+
+  // Normalize direct Spotify links into embeddable URLs for latest episode
+  const latestEpisodeEmbed = document.getElementById("latestEpisodeEmbed");
+  const toSpotifyEmbedUrl = (url) => {
+    if (!url) return "";
+    const trimmed = String(url).trim();
+    const matchers = [
+      { pattern: /open\.spotify\.com\/(episode|show)\/([A-Za-z0-9]+)/i, kind: 1, id: 2 },
+      { pattern: /open\.spotify\.com\/embed\/(episode|show)\/([A-Za-z0-9]+)/i, kind: 1, id: 2 },
+      { pattern: /spotify:(episode|show):([A-Za-z0-9]+)/i, kind: 1, id: 2 },
+      { pattern: /podcasters\.spotify\.com\/pod\/show\/[^\s/]+\/episodes\/[^\s/]*-([A-Za-z0-9]+)/i, kind: "episode", id: 1 }
+      { pattern: /podcasters\.spotify\.com\/pod\/show\/[^\s/]+\/episodes\/[^\s/]*-([A-Za-z0-9]+)/i, kind: "episode", id: 1 },
+      { pattern: /podcasters\.spotify\.com\/pod\/show\/([A-Za-z0-9]+)/i, kind: "show", id: 1 }
     ];
 
     for (const cfg of matchers) {
