@@ -13,8 +13,9 @@
     :root{--white:#ffffff;--off:#f4f4f5;--text:#18181b;--muted:#71717a;--border:rgba(0,0,0,0.07);--accent:#dc2626;--gold:#b45309;}
     html{scroll-behavior:smooth;}
     body{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;background:var(--white);color:var(--text);overflow-x:hidden;-webkit-font-smoothing:antialiased;cursor:none;}
-    #cur{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .22s cubic-bezier(.34,1.56,.64,1),height .22s cubic-bezier(.34,1.56,.64,1),background .2s;box-shadow:0 0 0 2px rgba(220,38,38,.2);}
-    #cur-ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(220,38,38,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .2s;}
+    #cur{position:fixed;width:10px;height:10px;background:var(--accent);border-radius:50%;pointer-events:none;z-index:9999;transform:translate(-50%,-50%);transition:width .22s cubic-bezier(.34,1.56,.64,1),height .22s cubic-bezier(.34,1.56,.64,1),background .2s;box-shadow:0 0 0 2px rgba(220,38,38,.2);opacity:0;}
+    #cur-ring{position:fixed;width:36px;height:36px;border:1.5px solid rgba(220,38,38,.4);border-radius:50%;pointer-events:none;z-index:9998;transform:translate(-50%,-50%);transition:width .3s,height .3s,border-color .2s;opacity:0;}
+    body.cursor-active #cur, body.cursor-active #cur-ring{opacity:1;}
     body.ch #cur{width:22px;height:22px;background:var(--text);box-shadow:none;}
     body.ch #cur-ring{width:54px;height:54px;border-color:rgba(0,0,0,.18);}
 
@@ -40,6 +41,11 @@
     .nav-cta{font-family:"Helvetica Neue",Helvetica,Arial,sans-serif;font-size:13px;font-weight:500;color:#fff;background:var(--accent);padding:9px 20px;border-radius:100px;text-decoration:none;margin-left:6px;margin-right:2px;flex-shrink:0;box-shadow:0 2px 8px rgba(220,38,38,0.35);transition:background .2s,transform .2s;}
     .nav-cta:hover{background:#b91c1c;transform:scale(1.04);}
     .nav-hamburger{display:none;background:none;border:none;font-size:18px;cursor:none;padding:0 14px;color:var(--text);}
+    /* Slim nav on scroll — collapses to logo + hamburger only */
+    nav.slim .nav-items { display:none; }
+    nav.slim .nav-cta { display:none; }
+    nav.slim .nav-hamburger { display:flex; align-items:center; }
+    nav.slim { padding: 0 4px; }
 
     /* HERO */
     #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 100px;position:relative;overflow:hidden;background:#111;}
@@ -190,25 +196,33 @@
 
     /* ── Mobile Menu Panel ── */
     .mobile-menu {
-      display: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
       position: fixed;
       top: 0; left: 0; right: 0; bottom: 0;
       z-index: 999;
       padding: 90px 24px 40px;
-      flex-direction: column;
-      gap: 8px;
-      background: rgba(255,255,255,0.96);
+      background: rgba(255,255,255,0.97);
       backdrop-filter: saturate(180%) blur(30px);
       -webkit-backdrop-filter: saturate(180%) blur(30px);
       overflow-y: auto;
       opacity: 0;
-      transform: translateY(-12px);
-      transition: opacity .3s, transform .3s;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(-10px);
+      transition: opacity .28s cubic-bezier(.4,0,.2,1),
+                  transform .28s cubic-bezier(.4,0,.2,1),
+                  visibility 0s linear .28s;
     }
     .mobile-menu.open {
-      display: flex;
       opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
       transform: none;
+      transition: opacity .28s cubic-bezier(.4,0,.2,1),
+                  transform .28s cubic-bezier(.4,0,.2,1),
+                  visibility 0s linear 0s;
     }
     .mob-section-label {
       font-size: 10px;
@@ -618,54 +632,94 @@
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
   document.body.classList.add('js-ready');
-  // Cursor
-  const cur=document.getElementById('cur'),ring=document.getElementById('cur-ring');
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove',e=>{mx=e.clientX;my=e.clientY;cur.style.left=mx+'px';cur.style.top=my+'px';});
-  (function loop(){rx+=(mx-rx)*.1;ry+=(my-ry)*.1;ring.style.left=rx+'px';ring.style.top=ry+'px';requestAnimationFrame(loop);})();
-  document.querySelectorAll('a,button,.pcard,.stag').forEach(el=>{
-    el.addEventListener('mouseenter',()=>document.body.classList.add('ch'));
-    el.addEventListener('mouseleave',()=>document.body.classList.remove('ch'));
+
+  // ── Cursor ──
+  const cur = document.getElementById('cur');
+  const ring = document.getElementById('cur-ring');
+  let mx = window.innerWidth/2, my = window.innerHeight/2;
+  let rx = mx, ry = my;
+  let cursorActive = false;
+
+  document.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+    if (!cursorActive) {
+      cursorActive = true;
+      document.body.classList.add('cursor-active');
+    }
   });
-  // Dropdowns
-  document.querySelectorAll('.nav-item').forEach(item=>{
-    const btn=item.querySelector('button');
-    if(!btn)return;
-    btn.addEventListener('click',e=>{
+  (function loop() {
+    rx += (mx - rx) * .1; ry += (my - ry) * .1;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(loop);
+  })();
+  document.querySelectorAll('a,button,.pcard,.stag').forEach(el => {
+    el.addEventListener('mouseenter', () => document.body.classList.add('ch'));
+    el.addEventListener('mouseleave', () => document.body.classList.remove('ch'));
+  });
+
+  // ── Nav: slim on scroll ──
+  const nav = document.getElementById('nav');
+  let lastScroll = 0;
+  window.addEventListener('scroll', () => {
+    const y = window.scrollY;
+    if (y > 80) {
+      nav.classList.add('slim');
+    } else {
+      nav.classList.remove('slim');
+      // also close mobile menu if we scroll back to top
+    }
+    lastScroll = y;
+  }, { passive: true });
+
+  // ── Desktop dropdowns ──
+  document.querySelectorAll('.nav-item').forEach(item => {
+    const btn = item.querySelector('button');
+    if (!btn) return;
+    btn.addEventListener('click', e => {
       e.stopPropagation();
-      const open=item.classList.contains('open');
-      document.querySelectorAll('.nav-item.open').forEach(i=>i.classList.remove('open'));
-      if(!open)item.classList.add('open');
+      const open = item.classList.contains('open');
+      document.querySelectorAll('.nav-item.open').forEach(i => i.classList.remove('open'));
+      if (!open) item.classList.add('open');
     });
   });
-  document.addEventListener('click',()=>document.querySelectorAll('.nav-item.open').forEach(i=>i.classList.remove('open')));
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')document.querySelectorAll('.nav-item.open').forEach(i=>i.classList.remove('open'));});
-  // Reveal
-  const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});},{threshold:0,rootMargin:'0px 0px -40px 0px'});
-  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
-  setTimeout(()=>document.querySelectorAll('.reveal:not(.vis)').forEach(el=>el.classList.add('vis')),1500);
+  document.addEventListener('click', () => {
+    document.querySelectorAll('.nav-item.open').forEach(i => i.classList.remove('open'));
+  });
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { closeMob(); document.querySelectorAll('.nav-item.open').forEach(i => i.classList.remove('open')); }
+  });
 
-  // Hamburger mobile menu
+  // ── Mobile / slim hamburger menu ──
   const hamburger = document.getElementById('navHamburger');
   const mobileMenu = document.getElementById('mobileMenu');
 
   function openMob() {
     mobileMenu.classList.add('open');
     hamburger.classList.add('is-open');
-    hamburger.innerHTML = '&#10005;'; // X icon
+    hamburger.textContent = '✕';
     document.body.style.overflow = 'hidden';
   }
   function closeMob() {
     mobileMenu.classList.remove('open');
     hamburger.classList.remove('is-open');
-    hamburger.innerHTML = '&#9776;'; // hamburger icon
+    hamburger.textContent = '☰';
     document.body.style.overflow = '';
   }
-  hamburger.addEventListener('click', () => {
+  hamburger.addEventListener('click', e => {
+    e.stopPropagation();
     mobileMenu.classList.contains('open') ? closeMob() : openMob();
   });
-  // Close on back/escape
-  document.addEventListener('keydown', e => { if(e.key === 'Escape') closeMob(); });
+  // close when a menu link is tapped
+  mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMob));
+
+  // ── Scroll reveal ──
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); });
+  }, { threshold: 0, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
+  setTimeout(() => document.querySelectorAll('.reveal:not(.vis)').forEach(el => el.classList.add('vis')), 1500);
+
 
   // Form
   fun
