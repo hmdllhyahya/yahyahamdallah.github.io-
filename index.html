@@ -744,6 +744,8 @@
   let lastScroll = 0;
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
+    const pageScrolled = y !== lastScroll;
+
     if (y > 80) {
       nav.classList.add('slim');
       document.body.classList.add('nav-shifted');
@@ -752,6 +754,11 @@
       document.body.classList.remove('nav-shifted');
       // also close mobile menu if we scroll back to top
     }
+
+    if (pageScrolled && mobileMenu && mobileMenu.classList.contains('open')) {
+      closeMob();
+    }
+
     lastScroll = y;
   }, { passive: true });
 
@@ -782,14 +789,12 @@
     mobileMenu.classList.add('open');
     hamburger.classList.add('is-open');
     hamburger.textContent = '✕';
-    document.body.style.overflow = 'hidden';
   }
   function closeMob() {
     if (!mobileMenu || !hamburger) return;
     mobileMenu.classList.remove('open');
     hamburger.classList.remove('is-open');
     hamburger.textContent = '☰';
-    document.body.style.overflow = '';
   }
   if (hamburger && mobileMenu) {
     hamburger.addEventListener('click', e => {
@@ -798,6 +803,15 @@
     });
     // close when a menu link is tapped
     mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMob));
+
+    const closeOnOutsideScroll = (event) => {
+      if (!mobileMenu.classList.contains('open')) return;
+      if (mobileMenu.contains(event.target) || hamburger.contains(event.target)) return;
+      closeMob();
+    };
+
+    document.addEventListener('wheel', closeOnOutsideScroll, { passive: true });
+    document.addEventListener('touchmove', closeOnOutsideScroll, { passive: true });
   }
 
   // ── Scroll reveal ──
