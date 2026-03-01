@@ -20,7 +20,7 @@
     body.ch #cur-ring{width:54px;height:54px;border-color:rgba(0,0,0,.18);}
 
     /* NAV */
-    nav{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:1000;display:flex;align-items:center;padding:0 6px;height:52px;border-radius:100px;background:rgba(255,255,255,0.6);backdrop-filter:saturate(200%) blur(28px) brightness(1.08);-webkit-backdrop-filter:saturate(200%) blur(28px) brightness(1.08);border:1px solid rgba(255,255,255,0.78);box-shadow:0 2px 12px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9);transition:box-shadow .3s;white-space:nowrap;}
+    nav{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:1000;display:flex;align-items:center;padding:0 6px;height:52px;border-radius:100px;background:rgba(255,255,255,0.6);backdrop-filter:saturate(200%) blur(28px) brightness(1.08);-webkit-backdrop-filter:saturate(200%) blur(28px) brightness(1.08);border:1px solid rgba(255,255,255,0.78);box-shadow:0 2px 12px rgba(0,0,0,0.08),inset 0 1px 0 rgba(255,255,255,0.9);transition:box-shadow .3s,top .38s cubic-bezier(.22,1,.36,1),left .38s cubic-bezier(.22,1,.36,1),transform .38s cubic-bezier(.22,1,.36,1),padding .28s cubic-bezier(.22,1,.36,1);white-space:nowrap;}
     nav:hover{box-shadow:0 8px 32px rgba(0,0,0,0.12),inset 0 1px 0 rgba(255,255,255,0.95);}
     .nav-logo{font-family:"Playfair Display",serif;font-size:17px;color:var(--text);text-decoration:none;letter-spacing:-.02em;padding:0 18px 0 14px;height:100%;display:flex;align-items:center;border-right:1px solid rgba(0,0,0,0.07);flex-shrink:0;}
     .nav-logo span{color:var(--accent);}
@@ -45,7 +45,7 @@
     nav.slim .nav-items { display:none; }
     nav.slim .nav-cta { display:none; }
     nav.slim .nav-hamburger { display:flex; align-items:center; }
-    nav.slim { padding: 0 4px; }
+    nav.slim { padding: 0 4px; top: 12px; left: 14px; transform: none; }
 
     /* HERO */
     #hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 24px 100px;position:relative;overflow:hidden;background:#111;}
@@ -184,6 +184,7 @@
 
     @media(max-width:768px){
       nav{top:12px;padding:0 4px;max-width:calc(100vw - 24px);}
+      nav.slim{left:12px;top:10px;transform:none;}
       .nav-items,.nav-cta{display:none;}
       .nav-hamburger{display:flex;align-items:center;}
       .about-grid,.contact-layout,.exp-grid{grid-template-columns:1fr;gap:44px;}
@@ -194,35 +195,54 @@
       .about-badge{right:0;}
     }
 
-    /* ── Mobile Menu Panel ── */
+    /* ── Liquid Glass Drop Menu (mobile + slim desktop) ── */
     .mobile-menu {
       display: flex;
       flex-direction: column;
       gap: 8px;
       position: fixed;
-      top: 0; left: 0; right: 0; bottom: 0;
+      top: 78px;
+      left: 50%;
+      width: clamp(280px, 30vw, 360px);
+      max-height: min(68vh, 540px);
       z-index: 999;
-      padding: 90px 24px 40px;
-      background: rgba(255,255,255,0.97);
-      backdrop-filter: saturate(180%) blur(30px);
-      -webkit-backdrop-filter: saturate(180%) blur(30px);
+      padding: 14px;
+      border-radius: 24px;
+      border: 1px solid rgba(255,255,255,0.82);
+      background: linear-gradient(145deg, rgba(255,255,255,0.64), rgba(255,255,255,0.42));
+      backdrop-filter: saturate(220%) blur(34px) brightness(1.08);
+      -webkit-backdrop-filter: saturate(220%) blur(34px) brightness(1.08);
+      box-shadow: 0 22px 64px rgba(0,0,0,.16), inset 0 1px 0 rgba(255,255,255,.92);
       overflow-y: auto;
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
-      transform: translateY(-10px);
-      transition: opacity .28s cubic-bezier(.4,0,.2,1),
-                  transform .28s cubic-bezier(.4,0,.2,1),
-                  visibility 0s linear .28s;
+      transform: translateX(-50%) translateY(-10px) scale(.98);
+      transform-origin: top center;
+      transition: opacity .26s cubic-bezier(.4,0,.2,1),
+                  transform .34s cubic-bezier(.22,1,.36,1),
+                  visibility 0s linear .26s,
+                  left .34s cubic-bezier(.22,1,.36,1),
+                  top .34s cubic-bezier(.22,1,.36,1);
+    }
+    body.nav-shifted .mobile-menu {
+      left: 14px;
+      top: 72px;
+      transform-origin: top left;
     }
     .mobile-menu.open {
       opacity: 1;
       visibility: visible;
       pointer-events: auto;
-      transform: none;
-      transition: opacity .28s cubic-bezier(.4,0,.2,1),
-                  transform .28s cubic-bezier(.4,0,.2,1),
-                  visibility 0s linear 0s;
+      transform: translateX(-50%) translateY(0) scale(1);
+      transition: opacity .26s cubic-bezier(.4,0,.2,1),
+                  transform .34s cubic-bezier(.22,1,.36,1),
+                  visibility 0s linear 0s,
+                  left .34s cubic-bezier(.22,1,.36,1),
+                  top .34s cubic-bezier(.22,1,.36,1);
+    }
+    body.nav-shifted .mobile-menu.open {
+      transform: translateX(0) translateY(0) scale(1);
     }
     .mob-section-label {
       font-size: 10px;
@@ -274,6 +294,16 @@
     /* Hamburger open state */
     .nav-hamburger.is-open { color: #dc2626; }
 
+
+    @media(max-width:768px){
+      .mobile-menu{top:72px;left:12px;width:calc(100vw - 24px);max-height:min(72vh,540px);transform:translateY(-10px) scale(.98);} 
+      .mobile-menu.open{transform:translateY(0) scale(1);} 
+      body.nav-shifted .mobile-menu{left:10px;top:66px;} 
+      body.nav-shifted .mobile-menu.open{transform:translateY(0) scale(1);} 
+      .mob-link{padding:13px 14px;border-radius:14px;} 
+      .mob-link-icon{width:36px;height:36px;border-radius:10px;} 
+    }
+
   </style>
 </head>
 <body>
@@ -297,9 +327,9 @@
       <div class="nav-dropdown">
         <a href="#contact"><div class="dd-icon">&#128172;</div><div class="dd-label">Get in Touch<small>Let's collaborate</small></div></a>
         <div class="dd-divider"></div>
-        <a href="https://www.linkedin.com/in/yahyahmdllh/" target="_blank"><div class="dd-icon">&#128188;</div><div class="dd-label">LinkedIn<small>@yahyahmdllh</small></div></a>
-        <a href="/cdn-cgi/l/email-protection#daa3bbb2a3bbb2b7beb6b6b29ab5afaeb6b5b5b1f4b9b5b7"><div class="dd-icon">&#9993;&#65039;</div><div class="dd-label">Email<small><span class="__cf_email__" data-cfemail="641d050c1d050c090008080c240b1110080b0b0f4a070b09">[email&#160;protected]</span></small></div></a>
-        <a href="https://bit.ly/PortoYahya_2025" target="_blank"><div class="dd-icon">&#128196;</div><div class="dd-label">Full Portfolio<small>bit.ly/PortoYahya_2025</small></div></a>
+        <a href="https://www.linkedin.com/in/yahyahmdllh/" target="_blank" rel="noopener noreferrer"><div class="dd-icon">&#128188;</div><div class="dd-label">LinkedIn<small>@yahyahmdllh</small></div></a>
+        <a href="mailto:hmdllhyahya@gmail.com"><div class="dd-icon">&#9993;&#65039;</div><div class="dd-label">Email<small>hmdllhyahya@gmail.com</small></div></a>
+        <a href="https://bit.ly/PortoYahya_2025" target="_blank" rel="noopener noreferrer"><div class="dd-icon">&#128196;</div><div class="dd-label">Full Portfolio<small>bit.ly/PortoYahya_2025</small></div></a>
       </div>
     </li>
   </ul>
@@ -332,7 +362,7 @@
       <div class="reveal rd2">
         <div class="about-photo-wrap">
           <div class="about-photo">
-            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=600&h=750&fit=crop&crop=face" alt="Yahya Hamdallah" />
+            <img src="assets/VideoCapture_20221102-215932.jpg" alt="Yahya Hamdallah" />
           </div>
           <div class="about-badge"><div class="bdot"></div><div class="btxt">Open to opportunities</div></div>
         </div>
@@ -588,17 +618,17 @@
       <div class="reveal rd2">
         <p class="contact-desc">Whether it&apos;s a script, a creative collaboration, content writing, or a production role &mdash; I&apos;m open to projects that tell a story worth telling.</p>
         <div class="socials">
-          <a href="/cdn-cgi/l/email-protection#b3cad2dbcad2dbded7dfdfdbf3dcc6c7dfdcdcd89dd0dcde" class="slink">
+          <a href="mailto:hmdllhyahya@gmail.com" class="slink">
             <div class="sico">&#9993;&#65039;</div>
-            <div class="smeta"><span>Email</span><small><span class="__cf_email__" data-cfemail="dba2bab3a2bab3b6bfb7b7b39bb4aeafb7b4b4b0f5b8b4b6">[email&#160;protected]</span></small></div>
+            <div class="smeta"><span>Email</span><small>hmdllhyahya@gmail.com</small></div>
           </a>
-          <a href="https://www.linkedin.com/in/yahyahmdllh/" target="_blank" class="slink">
+          <a href="https://www.linkedin.com/in/yahyahmdllh/" target="_blank" rel="noopener noreferrer" class="slink">
             <div class="sico" style="background:rgba(10,102,194,.3);">
               <svg width="18" height="18" viewBox="0 0 24 24" fill="#0a66c2"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
             </div>
             <div class="smeta"><span>LinkedIn</span><small>linkedin.com/in/yahyahmdllh</small></div>
           </a>
-          <a href="https://bit.ly/PortoYahya_2025" target="_blank" class="slink">
+          <a href="https://bit.ly/PortoYahya_2025" target="_blank" rel="noopener noreferrer" class="slink">
             <div class="sico" style="background:rgba(220,38,38,.25);">&#128196;</div>
             <div class="smeta"><span>Full Portfolio</span><small>bit.ly/PortoYahya_2025</small></div>
           </a>
@@ -609,14 +639,17 @@
         </div>
       </div>
       <div class="reveal rd3">
-        <form class="cform" onsubmit="sendMsg(event)">
+        <form class="cform" action="https://formsubmit.co/hmdllhyahya@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="New portfolio inquiry from yahyahmdllh.github.io" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_template" value="table" />
           <div class="frow">
-            <div class="ff"><label>First Name</label><input type="text" placeholder="John" required /></div>
-            <div class="ff"><label>Last Name</label><input type="text" placeholder="Doe" required /></div>
+            <div class="ff"><label>First Name</label><input type="text" name="first_name" placeholder="John" required /></div>
+            <div class="ff"><label>Last Name</label><input type="text" name="last_name" placeholder="Doe" required /></div>
           </div>
-          <div class="ff"><label>Email</label><input type="email" placeholder="john@example.com" required /></div>
-          <div class="ff"><label>Project Type</label><input type="text" placeholder="e.g. Script, Podcast, Content writing..." /></div>
-          <div class="ff"><label>Message</label><textarea placeholder="Tell me about your project or idea..."></textarea></div>
+          <div class="ff"><label>Email</label><input type="email" name="email" placeholder="john@example.com" required /></div>
+          <div class="ff"><label>Project Type</label><input type="text" name="project_type" placeholder="e.g. Script, Podcast, Content writing..." /></div>
+          <div class="ff"><label>Message</label><textarea name="message" placeholder="Tell me about your project or idea..." required></textarea></div>
           <button type="submit" class="btn-send" id="sb">Send Message &#8594;</button>
         </form>
       </div>
@@ -652,15 +685,15 @@
     <div class="mob-link-text">Skills<small>Creative &amp; technical</small></div>
   </a>
   <div class="mob-section-label">Connect</div>
-  <a href="mailto:yahyahmdllh@outlook.com" class="mob-link">
+  <a href="mailto:hmdllhyahya@gmail.com" class="mob-link">
     <div class="mob-link-icon">&#9993;&#65039;</div>
-    <div class="mob-link-text">Email<small>yahyahmdllh@outlook.com</small></div>
+    <div class="mob-link-text">Email<small>hmdllhyahya@gmail.com</small></div>
   </a>
-  <a href="https://www.linkedin.com/in/yahyahmdllh/" target="_blank" class="mob-link">
+  <a href="https://www.linkedin.com/in/yahyahmdllh/" target="_blank" rel="noopener noreferrer" class="mob-link">
     <div class="mob-link-icon">&#128188;</div>
     <div class="mob-link-text">LinkedIn<small>@yahyahmdllh</small></div>
   </a>
-  <a href="https://bit.ly/PortoYahya_2025" target="_blank" class="mob-link">
+  <a href="https://bit.ly/PortoYahya_2025" target="_blank" rel="noopener noreferrer" class="mob-link">
     <div class="mob-link-icon">&#128196;</div>
     <div class="mob-link-text">Full Portfolio<small>bit.ly/PortoYahya_2025</small></div>
   </a>
@@ -707,12 +740,20 @@
   let lastScroll = 0;
   window.addEventListener('scroll', () => {
     const y = window.scrollY;
+    const pageScrolled = y !== lastScroll;
+
     if (y > 80) {
       nav.classList.add('slim');
+      document.body.classList.add('nav-shifted');
     } else {
       nav.classList.remove('slim');
-      // also close mobile menu if we scroll back to top
+      document.body.classList.remove('nav-shifted');
     }
+
+    if (pageScrolled && mobileMenu && mobileMenu.classList.contains('open')) {
+      closeMob();
+    }
+
     lastScroll = y;
   }, { passive: true });
 
@@ -737,28 +778,36 @@
   // ── Mobile / slim hamburger menu ──
   const hamburger = document.getElementById('navHamburger');
   const mobileMenu = document.getElementById('mobileMenu');
-  if (!mobileMenu) { console.warn('mobileMenu not found'); }
 
   function openMob() {
-    if (!mobileMenu) return;
+    if (!mobileMenu || !hamburger) return;
     mobileMenu.classList.add('open');
     hamburger.classList.add('is-open');
     hamburger.textContent = '✕';
-    document.body.style.overflow = 'hidden';
   }
   function closeMob() {
-    if (!mobileMenu) return;
+    if (!mobileMenu || !hamburger) return;
     mobileMenu.classList.remove('open');
     hamburger.classList.remove('is-open');
     hamburger.textContent = '☰';
-    document.body.style.overflow = '';
   }
-  hamburger.addEventListener('click', e => {
-    e.stopPropagation();
-    mobileMenu.classList.contains('open') ? closeMob() : openMob();
-  });
-  // close when a menu link is tapped
-  if (mobileMenu) mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMob));
+  if (hamburger && mobileMenu) {
+    hamburger.addEventListener('click', e => {
+      e.stopPropagation();
+      mobileMenu.classList.contains('open') ? closeMob() : openMob();
+    });
+    // close when a menu link is tapped
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMob));
+
+    const closeOnOutsideScroll = (event) => {
+      if (!mobileMenu.classList.contains('open')) return;
+      if (mobileMenu.contains(event.target) || hamburger.contains(event.target)) return;
+      closeMob();
+    };
+
+    document.addEventListener('wheel', closeOnOutsideScroll, { passive: true });
+    document.addEventListener('touchmove', closeOnOutsideScroll, { passive: true });
+  }
 
   // ── Scroll reveal ──
   const obs = new IntersectionObserver(entries => {
@@ -767,66 +816,7 @@
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
   setTimeout(() => document.querySelectorAll('.reveal:not(.vis)').forEach(el => el.classList.add('vis')), 1500);
 
-
-  // Form
-  function sendMsg(e) {
-    e.preventDefault();
-    const btn = document.getElementById('sb');
-    const orig = btn.textContent;
-    btn.textContent = 'Sending…';
-    btn.style.opacity = '.7';
-    btn.disabled = true;
-    setTimeout(() => {
-      btn.textContent = '✓ Sent! I’ll reply soon.';
-      btn.style.background = '#16a34a';
-      btn.style.opacity = '1';
-      e.target.reset();
-      setTimeout(() => {
-        btn.textContent = orig;
-        btn.style.background = '';
-        btn.disabled = false;
-      }, 3500);
-    }, 1300);
-  }
 </script>
 
-<!-- MOBILE MENU -->
-<div class="mobile-menu" id="mobileMenu">
-  <div class="mob-section-label">Navigate</div>
-  <a href="#about" class="mob-link">
-    <div class="mob-link-icon">&#129505;</div>
-    <div class="mob-link-text">About Me<small>Who I am</small></div>
-  </a>
-  <div class="mob-section-label">Portfolio</div>
-  <a href="#projects" class="mob-link">
-    <div class="mob-link-icon">&#127916;</div>
-    <div class="mob-link-text">Projects<small>Films, podcast &amp; more</small></div>
-  </a>
-  <a href="#experience" class="mob-link">
-    <div class="mob-link-icon">&#128250;</div>
-    <div class="mob-link-text">Experience<small>Kompas TV &amp; orgs</small></div>
-  </a>
-  <a href="#skills" class="mob-link">
-    <div class="mob-link-icon">&#9997;&#65039;</div>
-    <div class="mob-link-text">Skills<small>Creative &amp; technical</small></div>
-  </a>
-  <div class="mob-section-label">Connect</div>
-  <a href="/cdn-cgi/l/email-protection#453c242d3c242d282129292d052a3031292a2a2e6b262a28" class="mob-link">
-    <div class="mob-link-icon">&#9993;&#65039;</div>
-    <div class="mob-link-text">Email<small><span class="__cf_email__" data-cfemail="b2cbd3dacbd3dadfd6dededaf2ddc7c6deddddd99cd1dddf">[email&#160;protected]</span></small></div>
-  </a>
-  <a href="https://www.linkedin.com/in/yahyahmdllh/" target="_blank" class="mob-link">
-    <div class="mob-link-icon">&#128188;</div>
-    <div class="mob-link-text">LinkedIn<small>@yahyahmdllh</small></div>
-  </a>
-  <a href="https://bit.ly/PortoYahya_2025" target="_blank" class="mob-link">
-    <div class="mob-link-icon">&#128196;</div>
-    <div class="mob-link-text">Full Portfolio<small>bit.ly/PortoYahya_2025</small></div>
-  </a>
-  <a href="tel:+6287821174471" class="mob-link">
-    <div class="mob-link-icon">&#128222;</div>
-    <div class="mob-link-text">WhatsApp / Phone<small>+62 878 2117 4471</small></div>
-  </a>
-  <a href="#contact" class="mob-link" style="margin-top:8px;background:var(--accent);border-radius:16px;">
-    <div class="mob-link-icon" style="background:rgba(255,255,255,.2);">&#128172;</div>
-    <div class="mob-link-text" style="c
+</body>
+</html>
