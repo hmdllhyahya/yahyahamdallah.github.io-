@@ -35,6 +35,7 @@
       -webkit-font-smoothing: antialiased;
       cursor: none;
     }
+    body.menu-open { overflow: hidden; }
 
     /* ── Cursor ── */
     #cur { position:fixed; width:10px; height:10px; background:#fff; border-radius:50%; pointer-events:none; z-index:9999; transform:translate(-50%,-50%); transition:width .22s cubic-bezier(.34,1.56,.64,1),height .22s cubic-bezier(.34,1.56,.64,1),background .2s; box-shadow:0 0 0 2px rgba(255,255,255,.2); }
@@ -68,6 +69,59 @@
       transition: background .2s, transform .2s;
     }
     .topbar-listen:hover { background: var(--accent2); transform: scale(1.04); }
+    .topbar-menu-btn {
+      display:flex; align-items:center; justify-content:center;
+      width:38px; height:38px; border-radius:12px;
+      border:1px solid rgba(255,255,255,.24);
+      background: rgba(255,255,255,.08);
+      color:#fff; font-size:18px; line-height:1; cursor:pointer;
+      transition: background .2s, border-color .2s, transform .2s;
+      margin-left: 10px;
+    }
+    .topbar-menu-btn:hover { background: rgba(255,255,255,.16); border-color: rgba(255,255,255,.45); transform: scale(1.03); }
+    .topbar-menu-btn.is-open { background: rgba(232,50,27,.22); border-color: rgba(232,50,27,.55); }
+
+    .topbar-right { display:flex; align-items:center; gap:10px; }
+
+    .topbar-dropdown {
+      position: fixed;
+      top: 74px;
+      right: 40px;
+      width: min(340px, calc(100vw - 24px));
+      max-height: min(74vh, 560px);
+      padding: 10px;
+      display:flex; flex-direction:column; gap:6px;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.35);
+      background: rgba(16,88,200,.86);
+      backdrop-filter: blur(24px) saturate(180%);
+      -webkit-backdrop-filter: blur(24px) saturate(180%);
+      box-shadow: 0 24px 64px rgba(0,0,0,.3), inset 0 1px 0 rgba(255,255,255,.2);
+      overflow-y: auto;
+      overscroll-behavior-y: contain;
+      -webkit-overflow-scrolling: touch;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transform: translateY(-10px) scale(.98);
+      transform-origin: top right;
+      transition: opacity .2s ease, transform .28s cubic-bezier(.22,1,.36,1), visibility 0s linear .2s;
+      z-index: 120;
+    }
+    .topbar-dropdown.open {
+      opacity:1; visibility:visible; pointer-events:auto;
+      transform: translateY(0) scale(1);
+      transition: opacity .2s ease, transform .28s cubic-bezier(.22,1,.36,1);
+    }
+    .topbar-dropdown a {
+      display:flex; align-items:center; justify-content:space-between;
+      padding:10px 12px; border-radius:12px;
+      text-decoration:none; color:rgba(255,255,255,.9); font-size:13px;
+      border:1px solid transparent;
+      transition:background .2s, border-color .2s, transform .2s;
+    }
+    .topbar-dropdown a:hover { background: rgba(255,255,255,.12); border-color: rgba(255,255,255,.3); transform: translateX(4px); }
+    .dd-meta { color: rgba(255,255,255,.55); font-size:11px; }
 
     /* ── Hero ── */
     #hero {
@@ -230,6 +284,23 @@
     .detail-label { font-size: 11px; font-weight: 700; letter-spacing:.09em; text-transform:uppercase; color:rgba(255,255,255,.75); }
     .detail-value { font-size: 14px; color: rgba(255,255,255,.9); font-weight: 400; }
 
+
+    /* ── Latest Episode spotlight ── */
+    #latest { background: var(--surface); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
+    .latest-wrap { margin-top: 44px; display:grid; grid-template-columns: 1.2fr .8fr; gap: 24px; align-items:start; }
+    .latest-player {
+      background: rgba(0,0,0,.2); border: 1px solid rgba(255,255,255,.2); border-radius: 20px; padding: 14px;
+      box-shadow: 0 20px 40px rgba(0,0,0,.2);
+    }
+    .latest-player iframe { width:100%; height:352px; border:0; border-radius: 12px; }
+    .latest-card { background: rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); border-radius: 20px; padding: 22px; }
+    .latest-tag { font-size:11px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,255,255,.78); margin-bottom: 10px; }
+    .latest-title { font-family:"Playfair Display",serif; font-size: 28px; line-height:1.12; letter-spacing:-.03em; margin-bottom: 10px; }
+    .latest-desc { font-size:14px; color:var(--muted); line-height:1.7; }
+    .latest-actions { margin-top: 16px; display:flex; gap:10px; flex-wrap:wrap; }
+    .latest-btn { display:inline-flex; align-items:center; gap:8px; padding:9px 14px; border-radius: 100px; font-size:12px; text-decoration:none; color:#fff; border:1px solid rgba(255,255,255,.3); }
+    .latest-btn:hover { background: rgba(255,255,255,.12); }
+
     /* ── Episodes ── */
     #episodes { background: rgba(0,0,0,.15); border-top: 1px solid rgba(255,255,255,.15); }
     .episodes-list { display: flex; flex-direction: column; gap: 12px; margin-top: 52px; }
@@ -323,8 +394,12 @@
     @keyframes floatUp { from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:none;} }
 
     @media(max-width:768px){
-      .topbar { padding: 0 20px; }
+      .topbar { padding: 0 14px; }
+      .topbar-back { display: none; }
       .topbar-listen { display: none; }
+      .topbar-dropdown { right: 12px; top: 68px; }
+      .latest-wrap { grid-template-columns: 1fr; }
+      .latest-player iframe { height: 320px; }
       .about-layout,.host-layout,.listen-cards { grid-template-columns:1fr; gap:36px; }
       .host-layout { grid-template-columns: 1fr; }
       .stats-inner { flex-direction: column; gap: 28px; }
@@ -342,8 +417,20 @@
 <header class="topbar">
   <a href="index.html" class="topbar-back">&#8592; Back to Portfolio</a>
   <a href="index.html" class="topbar-logo">Y<span>.</span>H</a>
-  <a href="https://open.spotify.com/show/siniarh17" target="_blank" rel="noopener noreferrer" class="topbar-listen">&#127897; Listen Now</a>
+  <div class="topbar-right">
+    <a href="https://podcasters.spotify.com/pod/show/siniarh17" target="_blank" rel="noopener noreferrer" class="topbar-listen">&#127897; Listen Now</a>
+    <button class="topbar-menu-btn" id="menuBtn" aria-label="Open menu" aria-expanded="false">☰</button>
+  </div>
 </header>
+
+<nav class="topbar-dropdown" id="topbarDropdown">
+  <a href="#hero"><span>Beranda</span><span class="dd-meta">Frontpage</span></a>
+  <a href="#latest"><span>Putar Episode Terbaru</span><span class="dd-meta">Play now</span></a>
+  <a href="#episodes"><span>Daftar Episode</span><span class="dd-meta">Arsip</span></a>
+  <a href="#listen"><span>Platform Dengar</span><span class="dd-meta">Spotify & Apple</span></a>
+  <a href="#host"><span>Tentang Host</span><span class="dd-meta">Yahya</span></a>
+  <a href="index.html"><span>Kembali ke Portfolio</span><span class="dd-meta">Home</span></a>
+</nav>
 
 <!-- HERO -->
 <section id="hero">
@@ -381,6 +468,38 @@
   </div>
 
   <div class="hero-scroll"><span>Explore</span><div class="hero-scroll-line"></div></div>
+</section>
+
+<!-- LATEST EPISODE -->
+<section id="latest">
+  <div class="container">
+    <p class="s-label reveal">Episode Paling Baru</p>
+    <h2 class="s-title reveal rd1">Putar langsung<br><em>episode terbaru.</em></h2>
+
+    <div class="latest-wrap">
+      <div class="latest-player reveal rd1">
+        <iframe
+          id="latestEpisodeEmbed"
+          title="Latest Siniar H17 episode"
+          data-episode-url="https://open.spotify.com/show/5f9V8SrjR3uG4A3K1wXbX2"
+          src="https://open.spotify.com/embed/show/5f9V8SrjR3uG4A3K1wXbX2?utm_source=generator"
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy">
+        </iframe>
+      </div>
+      <div class="latest-card reveal rd2">
+        <div class="latest-tag">Terbaru · Agustus 2025</div>
+        <div class="latest-title">Fantastic Four is Back &mdash; Tapi Apakah Bagus?</div>
+        <p class="latest-desc">
+          Episode terbaru kami langsung ditaruh tepat di bawah frontpage biar kamu bisa langsung play. Klik tombol di bawah untuk lanjut dengerin di platform favoritmu.
+        </p>
+        <div class="latest-actions">
+          <a class="latest-btn" href="https://podcasters.spotify.com/pod/show/siniarh17" target="_blank" rel="noopener noreferrer">&#9654; Play di Spotify</a>
+          <a class="latest-btn" href="https://podcasts.apple.com/us/podcast/id1488790358" target="_blank" rel="noopener noreferrer">&#127911; Apple Podcasts</a>
+        </div>
+      </div>
+    </div>
+  </div>
 </section>
 
 <!-- STATS BAR -->
@@ -621,6 +740,89 @@
     el.addEventListener("mouseenter",()=>document.body.classList.add("ch"));
     el.addEventListener("mouseleave",()=>document.body.classList.remove("ch"));
   });
+
+
+  // Topbar dropdown menu
+  const menuBtn = document.getElementById("menuBtn");
+  const topbarDropdown = document.getElementById("topbarDropdown");
+
+  function openTopbarMenu() {
+    if (!menuBtn || !topbarDropdown) return;
+    topbarDropdown.classList.add("open");
+    menuBtn.classList.add("is-open");
+    menuBtn.setAttribute("aria-expanded", "true");
+    menuBtn.textContent = "✕";
+    document.body.classList.add("menu-open");
+  }
+
+  function closeTopbarMenu() {
+    if (!menuBtn || !topbarDropdown) return;
+    topbarDropdown.classList.remove("open");
+    menuBtn.classList.remove("is-open");
+    menuBtn.setAttribute("aria-expanded", "false");
+    menuBtn.textContent = "☰";
+    document.body.classList.remove("menu-open");
+  }
+
+  if (menuBtn && topbarDropdown) {
+    menuBtn.addEventListener("click", (event) => {
+      event.stopPropagation();
+      topbarDropdown.classList.contains("open") ? closeTopbarMenu() : openTopbarMenu();
+    });
+
+    topbarDropdown.querySelectorAll("a").forEach((link) => {
+      link.addEventListener("click", closeTopbarMenu);
+    });
+
+    document.addEventListener("click", (event) => {
+      if (!topbarDropdown.classList.contains("open")) return;
+      if (topbarDropdown.contains(event.target) || menuBtn.contains(event.target)) return;
+      closeTopbarMenu();
+    });
+
+    const closeOnOutsideScroll = (event) => {
+      if (!topbarDropdown.classList.contains("open")) return;
+      if (topbarDropdown.contains(event.target) || menuBtn.contains(event.target)) return;
+      closeTopbarMenu();
+    };
+
+    document.addEventListener("wheel", closeOnOutsideScroll, { passive: true });
+    document.addEventListener("touchmove", closeOnOutsideScroll, { passive: true });
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") closeTopbarMenu();
+    });
+  }
+
+  // Normalize direct Spotify links into embeddable URLs for latest episode
+  const latestEpisodeEmbed = document.getElementById("latestEpisodeEmbed");
+  const toSpotifyEmbedUrl = (url) => {
+    if (!url) return "";
+    const trimmed = String(url).trim();
+    const matchers = [
+      { pattern: /open\.spotify\.com\/(episode|show)\/([A-Za-z0-9]+)/i, kind: 1, id: 2 },
+      { pattern: /open\.spotify\.com\/embed\/(episode|show)\/([A-Za-z0-9]+)/i, kind: 1, id: 2 },
+      { pattern: /spotify:(episode|show):([A-Za-z0-9]+)/i, kind: 1, id: 2 },
+      { pattern: /podcasters\.spotify\.com\/pod\/show\/[^\s/]+\/episodes\/[^\s/]*-([A-Za-z0-9]+)/i, kind: "episode", id: 1 }
+    ];
+
+    for (const cfg of matchers) {
+      const found = trimmed.match(cfg.pattern);
+      if (!found) continue;
+      const kind = cfg.kind === 1 ? found[cfg.kind] : cfg.kind;
+      const id = found[cfg.id];
+      return `https://open.spotify.com/embed/${kind.toLowerCase()}/${id}?utm_source=generator`;
+    }
+
+    return trimmed.includes("open.spotify.com/embed/") ? trimmed : "";
+  };
+
+  if (latestEpisodeEmbed) {
+    const directUrl = latestEpisodeEmbed.dataset.episodeUrl || latestEpisodeEmbed.src;
+    const normalizedEmbed = toSpotifyEmbedUrl(directUrl);
+    if (normalizedEmbed) latestEpisodeEmbed.src = normalizedEmbed;
+  }
+
 
   // Reveal
   const obs=new IntersectionObserver(entries=>{entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add("vis");});},{threshold:0,rootMargin:"0px 0px -30px 0px"});
