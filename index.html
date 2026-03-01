@@ -298,6 +298,7 @@
         <a href="#contact"><div class="dd-icon">&#128172;</div><div class="dd-label">Get in Touch<small>Let's collaborate</small></div></a>
         <div class="dd-divider"></div>
         <a href="https://www.linkedin.com/in/yahyahmdllh/" target="_blank" rel="noopener noreferrer"><div class="dd-icon">&#128188;</div><div class="dd-label">LinkedIn<small>@yahyahmdllh</small></div></a>
+        <a href="mailto:hmdllhyahya@gmail.com"><div class="dd-icon">&#9993;&#65039;</div><div class="dd-label">Email<small>hmdllhyahya@gmail.com</small></div></a>
         <a href="/cdn-cgi/l/email-protection#daa3bbb2a3bbb2b7beb6b6b29ab5afaeb6b5b5b1f4b9b5b7"><div class="dd-icon">&#9993;&#65039;</div><div class="dd-label">Email<small><span class="__cf_email__" data-cfemail="641d050c1d050c090008080c240b1110080b0b0f4a070b09">[email&#160;protected]</span></small></div></a>
         <a href="https://bit.ly/PortoYahya_2025" target="_blank" rel="noopener noreferrer"><div class="dd-icon">&#128196;</div><div class="dd-label">Full Portfolio<small>bit.ly/PortoYahya_2025</small></div></a>
       </div>
@@ -589,9 +590,9 @@
       <div class="reveal rd2">
         <p class="contact-desc">Whether it&apos;s a script, a creative collaboration, content writing, or a production role &mdash; I&apos;m open to projects that tell a story worth telling.</p>
         <div class="socials">
-          <a href="/cdn-cgi/l/email-protection#b3cad2dbcad2dbded7dfdfdbf3dcc6c7dfdcdcd89dd0dcde" class="slink">
+          <a href="mailto:hmdllhyahya@gmail.com" class="slink">
             <div class="sico">&#9993;&#65039;</div>
-            <div class="smeta"><span>Email</span><small><span class="__cf_email__" data-cfemail="dba2bab3a2bab3b6bfb7b7b39bb4aeafb7b4b4b0f5b8b4b6">[email&#160;protected]</span></small></div>
+            <div class="smeta"><span>Email</span><small>hmdllhyahya@gmail.com</small></div>
           </a>
           <a href="https://www.linkedin.com/in/yahyahmdllh/" target="_blank" rel="noopener noreferrer" class="slink">
             <div class="sico" style="background:rgba(10,102,194,.3);">
@@ -610,14 +611,17 @@
         </div>
       </div>
       <div class="reveal rd3">
-        <form class="cform" onsubmit="sendMsg(event)">
+        <form class="cform" action="https://formsubmit.co/hmdllhyahya@gmail.com" method="POST">
+          <input type="hidden" name="_subject" value="New portfolio inquiry from yahyahmdllh.github.io" />
+          <input type="hidden" name="_captcha" value="false" />
+          <input type="hidden" name="_template" value="table" />
           <div class="frow">
-            <div class="ff"><label>First Name</label><input type="text" placeholder="John" required /></div>
-            <div class="ff"><label>Last Name</label><input type="text" placeholder="Doe" required /></div>
+            <div class="ff"><label>First Name</label><input type="text" name="first_name" placeholder="John" required /></div>
+            <div class="ff"><label>Last Name</label><input type="text" name="last_name" placeholder="Doe" required /></div>
           </div>
-          <div class="ff"><label>Email</label><input type="email" placeholder="john@example.com" required /></div>
-          <div class="ff"><label>Project Type</label><input type="text" placeholder="e.g. Script, Podcast, Content writing..." /></div>
-          <div class="ff"><label>Message</label><textarea placeholder="Tell me about your project or idea..."></textarea></div>
+          <div class="ff"><label>Email</label><input type="email" name="email" placeholder="john@example.com" required /></div>
+          <div class="ff"><label>Project Type</label><input type="text" name="project_type" placeholder="e.g. Script, Podcast, Content writing..." /></div>
+          <div class="ff"><label>Message</label><textarea name="message" placeholder="Tell me about your project or idea..." required></textarea></div>
           <button type="submit" class="btn-send" id="sb">Send Message &#8594;</button>
         </form>
       </div>
@@ -653,9 +657,9 @@
     <div class="mob-link-text">Skills<small>Creative &amp; technical</small></div>
   </a>
   <div class="mob-section-label">Connect</div>
-  <a href="mailto:yahyahmdllh@outlook.com" class="mob-link">
+  <a href="mailto:hmdllhyahya@gmail.com" class="mob-link">
     <div class="mob-link-icon">&#9993;&#65039;</div>
-    <div class="mob-link-text">Email<small>yahyahmdllh@outlook.com</small></div>
+    <div class="mob-link-text">Email<small>hmdllhyahya@gmail.com</small></div>
   </a>
   <a href="https://www.linkedin.com/in/yahyahmdllh/" target="_blank" rel="noopener noreferrer" class="mob-link">
     <div class="mob-link-icon">&#128188;</div>
@@ -769,27 +773,6 @@
   document.querySelectorAll('.reveal').forEach(el => obs.observe(el));
   setTimeout(() => document.querySelectorAll('.reveal:not(.vis)').forEach(el => el.classList.add('vis')), 1500);
 
-
-  // Form
-  function sendMsg(e) {
-    e.preventDefault();
-    const btn = document.getElementById('sb');
-    const orig = btn.textContent;
-    btn.textContent = 'Sending…';
-    btn.style.opacity = '.7';
-    btn.disabled = true;
-    setTimeout(() => {
-      btn.textContent = '✓ Sent! I’ll reply soon.';
-      btn.style.background = '#16a34a';
-      btn.style.opacity = '1';
-      e.target.reset();
-      setTimeout(() => {
-        btn.textContent = orig;
-        btn.style.background = '';
-        btn.disabled = false;
-      }, 3500);
-    }, 1300);
-  }
 </script>
 
 </body>
